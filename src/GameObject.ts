@@ -1,0 +1,73 @@
+import * as Pearl from 'pearl';
+
+export abstract class Component {
+  init(self: GameObject) {
+  }
+
+  update(self: GameObject, dt: number) {
+  }
+
+  collision(self: GameObject, other: GameObject) {
+  }
+}
+
+export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
+
+export interface CreateOpts {
+  components: Component[];
+  render: renderFn;
+}
+
+export class GameObject extends Pearl.Entity<null> {
+  game: Pearl.Game;
+
+  private components: Component[];
+  private renderFn: renderFn;
+
+  constructor(opts: CreateOpts) {
+    super();
+    this.components = opts.components;
+    this.renderFn = opts.render;
+  }
+
+  getComponent<T extends Component>(componentType: {new(): T}): T {
+    const c = this.components.find((component) => component instanceof componentType);
+
+    if (!c) {
+      throw new Error(`no component found for type ${componentType}`)
+    }
+
+    // TODO: TypeScript doesn't know that c here is instanceof componentType, for some reason,
+    // so we unfortunately have to hard-cast here
+    return c as T;
+  }
+
+  /* Pearl.Entity compatibility */
+
+  init() {
+    for (let component of this.components) {
+      component.init(this);
+    }
+  }
+
+  update(dt: number) {
+    for (let component of this.components) {
+      component.update(this, dt);
+    }
+  }
+
+  collision(other: GameObject) {
+    for (let component of this.components) {
+      component.collision(this, other);
+    }
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    this.renderFn(this, ctx);
+  }
+}
+
+export function createGameObject(opts: CreateOpts): GameObject {
+  const obj = new GameObject(opts);
+  return obj;
+}
