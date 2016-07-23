@@ -21,7 +21,7 @@ abstract class Component {
     return this.gameObject.game;
   }
 
-  getComponent<T extends Component>(componentType: {new(): T}): T {
+  getComponent<T extends Component>(componentType: {new(...args: any[]): T}): T {
     return this.gameObject.getComponent(componentType);
   }
 }

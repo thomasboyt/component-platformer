@@ -51,7 +51,7 @@ export default class GameObject extends Pearl.Entity<null> {
     return !!this.tags.find((val) => val === tag);
   }
 
-  maybeGetComponent<T extends Component>(componentType: {new(): T}): T | null {
+  maybeGetComponent<T extends Component>(componentType: {new(...args: any[]): T}): T | null {
     const c = this.components.find((component) => component instanceof componentType);
 
     if (!c) {
@@ -63,7 +63,7 @@ export default class GameObject extends Pearl.Entity<null> {
     return c as T;
   }
 
-  getComponent<T extends Component>(componentType: {new(): T}): T {
+  getComponent<T extends Component>(componentType: {new(...args: any[]): T}): T {
     const c = this.maybeGetComponent(componentType);
 
     if (!c) {
