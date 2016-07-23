@@ -54,6 +54,8 @@ export default class AssetManager extends Component {
         resolve(this.assets);
       }
 
+      // TODO: Create PreloadUI here
+
       const onAssetLoaded = () => {
         this.numLoaded += 1;
 
