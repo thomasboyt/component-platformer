@@ -10,6 +10,7 @@ export interface CreateOpts {
   components: Component[];
   render: renderFn;
   zIndex?: number;
+  tags?: string[];
 }
 
 export default class GameObject extends Pearl.Entity<null> {
@@ -18,6 +19,7 @@ export default class GameObject extends Pearl.Entity<null> {
   private name: string;
   private components: Component[];
   private renderFn: renderFn;
+  private tags: string[] = [];
 
   constructor(opts: CreateOpts) {
     super();
@@ -29,6 +31,15 @@ export default class GameObject extends Pearl.Entity<null> {
     if (opts.zIndex !== undefined) {
       this.zIndex = opts.zIndex;
     }
+
+    if (opts.tags !== undefined) {
+      this.tags = opts.tags;
+    }
+  }
+
+  // TODO: probably use a Set or Map for this
+  hasTag(tag: string): boolean {
+    return !!this.tags.find((val) => val === tag);
   }
 
   maybeGetComponent<T extends Component>(componentType: {new(): T}): T | null {

@@ -2,17 +2,34 @@ import * as Pearl from 'pearl';
 
 import {Component, GameObject, Physical} from './shim';
 
-import PlatformerPhysics from './components/PlatformerPhysics';
+import PlatformerPhysics, {BLOCK_TAG} from './components/PlatformerPhysics';
 import PlayerController from './components/PlayerController';
 
 function renderPlayer(obj: GameObject, ctx: CanvasRenderingContext2D) {
+  const phys = obj.getComponent(Physical);
+
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(phys.center.x - phys.size.x / 2,
+               phys.center.y - phys.size.y / 2,
+               phys.size.x,
+               phys.size.y);
+}
+
+function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
+  const phys = obj.getComponent(Physical);
+
+  ctx.fillStyle = 'white';
+  ctx.fillRect(phys.center.x - phys.size.x / 2,
+               phys.center.y - phys.size.y / 2,
+               phys.size.x,
+               phys.size.y);
 }
 
 export default class Game extends Pearl.Game {
   init() {
     const player = new GameObject({
       // name is used for debug display and maybe lookups in the future?
-      name: 'Player',
+      name: 'player',
 
       components: [
         // add positioning to the world and make collidable
@@ -41,6 +58,28 @@ export default class Game extends Pearl.Game {
       // zIndex: 0,
     });
 
+    const platform = new GameObject({
+      name: 'platform',
+      tags: [BLOCK_TAG],
+
+      components: [
+        new Physical({
+          center: {
+            x: 300,
+            y: 300,
+          },
+          size: {
+            x: 500,
+            y: 25,
+          },
+        })
+      ],
+
+      render: renderPlatform,
+    })
+
     this.entities.add(player, null);
+
+    this.entities.add(platform, null);
   }
 }

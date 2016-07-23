@@ -1,5 +1,8 @@
 import * as Pearl from 'pearl';
 import {Component, GameObject, Physical} from '../shim';
+import {rectangleIntersection} from '../util/math';
+
+export const BLOCK_TAG = 'Block';
 
 export default class PlatformerPhysics extends Component {
   grounded: boolean = false;
@@ -13,15 +16,15 @@ export default class PlatformerPhysics extends Component {
 
     // TODO: Obviously getGame() doesn't exist. What will a good way to look up the gravity be?
     // Maybe something like self.getComponentByTag("gameController") ?
-    physical.vel.y += self.getGame().gravityAccel;
+    // physical.vel.y += self.getGame().gravityAccel;
+    physical.vel.y += (5 / 10000) * dt;
   }
 
   collision(self: GameObject, other: GameObject) {
     const phys = self.getComponent(Physical);
     const plat = self.getComponent(PlatformerPhysics);
 
-    // Should this use some sort of tagging system?
-    if (self instanceof Block) {
+    if (other.hasTag(BLOCK_TAG)) {
       const intersect = rectangleIntersection(
         phys,
         other.getComponent(Physical)

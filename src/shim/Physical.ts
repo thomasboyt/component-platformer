@@ -26,7 +26,7 @@ export default class Physical extends Component {
       this.center = settings.center;
     }
     if (settings.size) {
-      this.center = settings.size;
+      this.size = settings.size;
     }
   }
 
