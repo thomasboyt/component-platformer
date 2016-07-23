@@ -1,6 +1,6 @@
 const assets = {
   images: {
-    playerSheet: require('../assets/player_sheet.png'),
+    playerSheet: require<string>('../assets/player_sheet.png'),
   },
   audio: {
   },
