@@ -8,7 +8,7 @@ export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
 export interface CreateOpts {
   name: string;
   components: Component[];
-  render: renderFn;
+  render?: renderFn;
   zIndex?: number;
   tags?: string[];
 }
@@ -18,7 +18,7 @@ export default class GameObject extends Pearl.Entity<null> {
 
   private name: string;
   private components: Component[];
-  private renderFn: renderFn;
+  private renderFn?: renderFn;
   private tags: string[] = [];
 
   constructor(opts: CreateOpts) {
@@ -94,6 +94,8 @@ export default class GameObject extends Pearl.Entity<null> {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    this.renderFn(this, ctx);
+    if (this.renderFn) {
+      this.renderFn(this, ctx);
+    }
   }
 }

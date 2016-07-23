@@ -5,6 +5,11 @@ The Component and GameObject design are inspired heavily by Unity. It remains to
 ## Design Questions
 
 * [ ] What is a component responsible for? Standardize and document.
+  * Should components be able to *render*? Currently rendering is a separate function defined on the GameObject.
+  * https://docs.unity3d.com/Manual/class-SpriteRenderer.html
+* [ ] How are "game controller" level components handled?
+  * Singleton example in Unity: https://unity3d.com/learn/tutorials/projects/2d-roguelike-tutorial/writing-game-manager
+  * Useful SA discussion on Unity singletons starts here: http://forums.somethingawful.com/showthread.php?threadid=2692947&userid=0&perpage=40&pagenumber=444#post462272736
 * [x] How should we look up components?
   * Components part of the current object: `self.getComponent(Type)`
 * [ ] How should we look up objects?
