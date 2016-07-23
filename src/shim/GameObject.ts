@@ -6,20 +6,29 @@ import Component from './Component';
 export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
 
 export interface CreateOpts {
+  name: string;
   components: Component[];
   render: renderFn;
+  zIndex?: number;
 }
 
 export default class GameObject extends Pearl.Entity<null> {
   game: Pearl.Game;
 
+  private name: string;
   private components: Component[];
   private renderFn: renderFn;
 
   constructor(opts: CreateOpts) {
     super();
+
+    this.name = opts.name;
     this.components = opts.components;
     this.renderFn = opts.render;
+
+    if (opts.zIndex !== undefined) {
+      this.zIndex = opts.zIndex;
+    }
   }
 
   maybeGetComponent<T extends Component>(componentType: {new(): T}): T | null {
@@ -38,7 +47,7 @@ export default class GameObject extends Pearl.Entity<null> {
     const c = this.maybeGetComponent(componentType);
 
     if (!c) {
-      throw new Error(`could not find component of type ${c}`);
+      throw new Error(`could not find component of type ${componentType.name}`);
     }
 
     return c;

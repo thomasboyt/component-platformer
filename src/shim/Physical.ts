@@ -2,6 +2,11 @@ import * as Pearl from 'pearl';
 import GameObject from './GameObject';
 import Component from './Component';
 
+export interface PhysicalSettings {
+  center?: Pearl.Coordinates;
+  size?: Pearl.Coordinates;
+}
+
 export default class Physical extends Component {
   center: Pearl.Coordinates;
   size: Pearl.Coordinates;
@@ -13,6 +18,17 @@ export default class Physical extends Component {
     x: 0,
     y: 0,
   };
+
+  constructor(settings: PhysicalSettings = {}) {
+    super();
+
+    if (settings.center) {
+      this.center = settings.center;
+    }
+    if (settings.size) {
+      this.center = settings.size;
+    }
+  }
 
   update(self: GameObject, dt: number) {
     this.center.x += this.vel.x * dt;

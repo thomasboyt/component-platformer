@@ -19,6 +19,10 @@ The Component and GameObject design are inspired heavily by Unity. It remains to
 
 * [x] Shim `Physical` component into setting center/size on the component so collision checks actually work
 
+## Game Todo
+
+* [ ] everything
+
 ## Resources
 
 * http://gameprogrammingpatterns.com/component.html
