@@ -23,7 +23,10 @@ The Component and GameObject design are inspired heavily by Unity. It remains to
 
 ## Game Todo
 
-* [ ] everything
+* [ ] Add asset loader
+* [ ] Add spritesheet, animations for player character
+* [ ] Implement enemies, enemy AI
+* [ ] Add sounds
 
 ## Resources
 
