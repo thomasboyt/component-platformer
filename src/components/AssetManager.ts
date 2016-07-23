@@ -1,0 +1,94 @@
+import {Component} from '../shim';
+import AudioManager from './AudioManager';
+
+type AssetMap = {
+  images: {
+    [key:string]: HTMLImageElement;
+  };
+  audio: {
+    [key:string]: AudioBuffer;
+  };
+}
+
+interface StringMap {
+  [key: string]: string;
+}
+
+type AssetCfg = {
+  images: StringMap;
+  audio: StringMap;
+}
+
+export default class AssetManager extends Component {
+  assets: AssetMap;
+  numTotal: number;
+  numLoaded: number = 0;
+  audioCtx: AudioContext;
+
+  _assetCfg: AssetCfg;
+
+  constructor(assetCfg: AssetCfg) {
+    super();
+    this.assets = {
+      'images': {},
+      'audio': {},
+    };
+
+    this._assetCfg = assetCfg;
+
+    this.numTotal = (
+      Object.keys(this._assetCfg.images).length +
+      Object.keys(this._assetCfg.audio).length
+    );
+  }
+
+  init() {
+    const audioCtx = this.getComponent(AudioManager).ctx;
+    this.audioCtx = audioCtx;
+  }
+
+  load(): Promise<AssetMap> {
+    return new Promise((resolve, reject) => {
+      if (this.numTotal === 0) {
+        // no assets, resolve immediately
+        resolve(this.assets);
+      }
+
+      const onAssetLoaded = () => {
+        this.numLoaded += 1;
+
+        if (this.numTotal === this.numLoaded) {
+          resolve(this.assets);
+        }
+      };
+
+      for (let name of Object.keys(this._assetCfg.images)) {
+        const src = this._assetCfg.images[name];
+
+        const img = new Image();
+        img.onload = onAssetLoaded;
+        img.src = src;
+
+        this.assets.images[name] = img;
+      }
+
+      for (let name of Object.keys(this._assetCfg.audio)) {
+        const src = this._assetCfg.audio[name];
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', src, true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = () => {
+          this.audioCtx.decodeAudioData(xhr.response, (buf) => {
+            this.assets.audio[name] = buf;
+            onAssetLoaded();
+          });
+        };
+
+        xhr.send();
+      }
+    });
+  }
+
+}

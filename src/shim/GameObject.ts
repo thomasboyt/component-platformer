@@ -2,6 +2,7 @@ import * as Pearl from 'pearl';
 
 import Physical from './Physical';
 import Component from './Component';
+import Game from './Game';
 
 export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
 
@@ -14,10 +15,10 @@ export interface CreateOpts {
 }
 
 export default class GameObject extends Pearl.Entity<null> {
-  game: Pearl.Game;
+  game: Game;
 
   private name: string;
-  private components: Component[];
+  private components: Component[] = [];
   private renderFn?: renderFn;
   private tags: string[] = [];
 
@@ -25,8 +26,11 @@ export default class GameObject extends Pearl.Entity<null> {
     super();
 
     this.name = opts.name;
-    this.components = opts.components;
     this.renderFn = opts.render;
+
+    for (let component of opts.components) {
+      this.addComponent(component);
+    }
 
     if (opts.zIndex !== undefined) {
       this.zIndex = opts.zIndex;
@@ -35,6 +39,11 @@ export default class GameObject extends Pearl.Entity<null> {
     if (opts.tags !== undefined) {
       this.tags = opts.tags;
     }
+  }
+
+  private addComponent(component: Component) {
+    component.gameObject = this;
+    this.components.push(component);
   }
 
   // TODO: probably use a Set or Map for this
@@ -67,14 +76,15 @@ export default class GameObject extends Pearl.Entity<null> {
   /* Pearl.Entity compatibility */
 
   init() {
+    // game is set at this point
     for (let component of this.components) {
-      component.init(this);
+      component.init();
     }
   }
 
   update(dt: number) {
     for (let component of this.components) {
-      component.update(this, dt);
+      component.update(dt);
     }
 
     const phys = this.maybeGetComponent(Physical);
@@ -89,7 +99,7 @@ export default class GameObject extends Pearl.Entity<null> {
 
   collision(other: GameObject) {
     for (let component of this.components) {
-      component.collision(this, other);
+      component.collision(other);
     }
   }
 

@@ -30,7 +30,7 @@ export default class Physical extends Component {
     }
   }
 
-  update(self: GameObject, dt: number) {
+  update(dt: number) {
     this.center.x += this.vel.x * dt;
     this.center.y += this.vel.y * dt;
   }

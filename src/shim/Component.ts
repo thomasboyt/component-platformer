@@ -1,13 +1,28 @@
 import GameObject from './GameObject';
+import Game from './Game';
 
 abstract class Component {
-  init(self: GameObject) {
+  gameObject: GameObject;
+
+  init() {
   }
 
-  update(self: GameObject, dt: number) {
+  update(dt: number) {
   }
 
-  collision(self: GameObject, other: GameObject) {
+  collision(other: GameObject) {
+  }
+
+  /*
+   * Convenience stuff that maps back to gameObject
+   */
+
+  get game(): Game {
+    return this.gameObject.game;
+  }
+
+  getComponent<T extends Component>(componentType: {new(): T}): T {
+    return this.gameObject.getComponent(componentType);
   }
 }
 

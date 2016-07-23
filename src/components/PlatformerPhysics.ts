@@ -1,27 +1,26 @@
 import * as Pearl from 'pearl';
 import {Component, GameObject, Physical} from '../shim';
-import {rectangleIntersection} from '../util/math';
-
 import GameManager from './GameManager';
+import {rectangleIntersection} from '../util/math';
 
 export const BLOCK_TAG = 'Block';
 
 export default class PlatformerPhysics extends Component {
   grounded: boolean = false;
 
-  update(self: GameObject, dt: number) {
-    const physical = self.getComponent(Physical);
+  update(dt: number) {
+    const physical = this.getComponent(Physical);
 
     if (physical.vel.y !== 0) {
       this.grounded = false;
     }
 
-    physical.vel.y += GameManager.getInstance().gravityAccel * dt;
+    physical.vel.y += this.game.obj.getComponent(GameManager).gravityAccel * dt;
   }
 
-  collision(self: GameObject, other: GameObject) {
-    const phys = self.getComponent(Physical);
-    const plat = self.getComponent(PlatformerPhysics);
+  collision(other: GameObject) {
+    const phys = this.getComponent(Physical);
+    const plat = this.getComponent(PlatformerPhysics);
 
     if (other.hasTag(BLOCK_TAG)) {
       const intersect = rectangleIntersection(
