@@ -5,7 +5,13 @@ export default class Physical extends Component {
   center: Pearl.Coordinates;
   size: Pearl.Coordinates;
   angle: number;
-  vel: Pearl.Coordinates;
+  boundingBox: Pearl.BoundingBox = Pearl.BoundingBox.Rectangle;
+
+  // TODO: This maybe belongs somewhere else?
+  vel: Pearl.Coordinates = {
+    x: 0,
+    y: 0,
+  };
 
   update(self: GameObject, dt: number) {
     this.center.x += this.vel.x * dt;

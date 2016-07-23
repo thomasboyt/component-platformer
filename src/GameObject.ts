@@ -1,5 +1,7 @@
 import * as Pearl from 'pearl';
 
+import Physical from './components/Physical';
+
 export abstract class Component {
   init(self: GameObject) {
   }
@@ -30,16 +32,26 @@ export class GameObject extends Pearl.Entity<null> {
     this.renderFn = opts.render;
   }
 
-  getComponent<T extends Component>(componentType: {new(): T}): T {
+  maybeGetComponent<T extends Component>(componentType: {new(): T}): T | null {
     const c = this.components.find((component) => component instanceof componentType);
 
     if (!c) {
-      throw new Error(`no component found for type ${componentType}`)
+      return null;
     }
 
     // TODO: TypeScript doesn't know that c here is instanceof componentType, for some reason,
     // so we unfortunately have to hard-cast here
     return c as T;
+  }
+
+  getComponent<T extends Component>(componentType: {new(): T}): T {
+    const c = this.maybeGetComponent(componentType);
+
+    if (!c) {
+      throw new Error(`could not find component of type ${c}`);
+    }
+
+    return c;
   }
 
   /* Pearl.Entity compatibility */
@@ -53,6 +65,15 @@ export class GameObject extends Pearl.Entity<null> {
   update(dt: number) {
     for (let component of this.components) {
       component.update(this, dt);
+    }
+
+    const phys = this.maybeGetComponent(Physical);
+
+    if (phys) {
+      this.center = phys.center;
+      this.size = phys.size;
+      this.boundingBox = phys.boundingBox;
+      this.angle = phys.angle;
     }
   }
 
