@@ -14,6 +14,8 @@ The Component and GameObject design are inspired heavily by Unity. It remains to
   * By tag: http://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
   * Unity has the concept of a "component tree" that's based around the `Transform` component, so you can e.g. look up "child objects"
 * [ ] Begin figuring out what dev tooling around components looks like: how are components visualized?
+* [ ] Currently, there are order-dependent update chains. Is this okay? Should this be codified?
+  * For example: `PlayerController` has to be applied *before* `PlatformerPhysics`, or things feel really laggy since they're not applied for a whole frame.
 
 ## Shim Todo
 

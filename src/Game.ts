@@ -43,10 +43,10 @@ export default class Game extends Pearl.Game {
             y: 20,
           }
         }),
-        // add platformer physics to apply gravity and collision with platforms
-        new PlatformerPhysics(),
         // add controls to allow player to move left/right and jump
         new PlayerController(),
+        // add platformer physics to apply gravity and collision with platforms
+        new PlatformerPhysics(),
       ],
 
       render: renderPlayer,
