@@ -1,6 +1,6 @@
-This is a speculative repo showing what a component-based version of [Pearl](https://github.com/thomasboyt/pearl) could look like. I'm hoping to implement it as a little shim on top of Pearl's `Entity` class before actually implementing it in the engine itself. I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.com/thomasboyt/blorp), with this to see if it's actually feasible.
+This is a **speculative** repo showing what a component-based version of [Pearl](https://github.com/thomasboyt/pearl) could look like. I'm hoping to implement it as a little shim on top of Pearl's `Entity` class before actually implementing it in the engine itself. I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.com/thomasboyt/blorp), with this to see if it's actually feasible.
 
-The Component and GameObject design are inspired heavily by Unity. It remains to be seen whether they'll actually be the right way to implement things.
+The Component and GameObject design are inspired heavily by Unity (Components are basically a much more minimal version of MonoBehaviour, while GameObjects are, uh, GameObjects). It remains to be seen whether they'll actually be the right way to implement things, especially when looking at inter-component and inter-object communication.
 
 ## Design Questions
 
