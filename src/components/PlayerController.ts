@@ -1,7 +1,6 @@
 import * as Pearl from 'pearl';
-import {GameObject, Component} from '../GameObject';
+import {Component, GameObject, Physical} from '../shim';
 
-import Physical from './Physical';
 import PlatformerPhysics from './PlatformerPhysics';
 
 export default class PlayerController extends Component {

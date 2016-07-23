@@ -1,5 +1,6 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject} from '../GameObject';
+import GameObject from './GameObject';
+import Component from './Component';
 
 export default class Physical extends Component {
   center: Pearl.Coordinates;
@@ -7,7 +8,7 @@ export default class Physical extends Component {
   angle: number;
   boundingBox: Pearl.BoundingBox = Pearl.BoundingBox.Rectangle;
 
-  // TODO: This maybe belongs somewhere else?
+  // TODO: This maybe belongs somewhere else? Especially if it's going to be this generic?
   vel: Pearl.Coordinates = {
     x: 0,
     y: 0,

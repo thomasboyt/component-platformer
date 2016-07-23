@@ -1,17 +1,7 @@
 import * as Pearl from 'pearl';
 
-import Physical from './components/Physical';
-
-export abstract class Component {
-  init(self: GameObject) {
-  }
-
-  update(self: GameObject, dt: number) {
-  }
-
-  collision(self: GameObject, other: GameObject) {
-  }
-}
+import Physical from './Physical';
+import Component from './Component';
 
 export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
 
@@ -20,7 +10,7 @@ export interface CreateOpts {
   render: renderFn;
 }
 
-export class GameObject extends Pearl.Entity<null> {
+export default class GameObject extends Pearl.Entity<null> {
   game: Pearl.Game;
 
   private components: Component[];
@@ -86,9 +76,4 @@ export class GameObject extends Pearl.Entity<null> {
   draw(ctx: CanvasRenderingContext2D) {
     this.renderFn(this, ctx);
   }
-}
-
-export function createGameObject(opts: CreateOpts): GameObject {
-  const obj = new GameObject(opts);
-  return obj;
 }

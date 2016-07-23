@@ -1,8 +1,7 @@
 import * as Pearl from 'pearl';
 
-import {Component, GameObject, createGameObject} from './GameObject';
+import {Component, GameObject, Physical} from './shim';
 
-import Physical from './components/Physical';
 import PlatformerPhysics from './components/PlatformerPhysics';
 import PlayerController from './components/PlayerController';
 
@@ -11,7 +10,7 @@ function renderPlayer(obj: GameObject, ctx: CanvasRenderingContext2D) {
 
 export default class Game extends Pearl.Game {
   init() {
-    const player = createGameObject({
+    const player = new GameObject({
       components: [
         new Physical(),
         new PlatformerPhysics(),

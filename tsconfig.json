@@ -27,11 +27,12 @@
   },
   "files": [
     "src/components/GameController.ts",
-    "src/components/Physical.ts",
     "src/components/PlatformerPhysics.ts",
     "src/components/PlayerController.ts",
     "src/Game.ts",
-    "src/GameObject.ts",
-    "src/src.ts"
+    "src/shim/Component.ts",
+    "src/shim/GameObject.ts",
+    "src/shim/index.ts",
+    "src/shim/Physical.ts"
   ]
 }

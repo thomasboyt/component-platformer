@@ -1,7 +1,5 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject} from '../GameObject';
-
-import Physical from './Physical';
+import {Component, GameObject, Physical} from '../shim';
 
 export default class PlatformerPhysics extends Component {
   grounded: boolean = false;
