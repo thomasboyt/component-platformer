@@ -33,11 +33,33 @@ The Component and GameObject design are inspired heavily by Unity (Components ar
 
 ## Game Todo
 
+The game itself should be a super-simplified version of Blorp, mainly to avoid implementing trickier platformer details and *especially* to avoid implementing a level editor.
+
+One simple single-screen level should suffice. The player's goal is to collect some number of coins. Enemies should randomly spawn from certain positions, or maybe teleport in some distance away from the player. Once the player has collected all the coins, the game should display a "you win!" screen and restart.
+
 * [x] Add asset loader
 * [x] Add spritesheet, animations for player character
 * [ ] Add asset loading UI
-* [ ] Implement enemies, enemy AI
+* [ ] Add gun
+  * [ ] Add bullets
+* [ ] Add enemies, enemy AI
+  * [ ] Implement Blorp
+    * [ ] Blorp should change directions when it hits a wall
+* [ ] Add pickups (coins?)
+* [ ] Implement game rules
+  * [ ] Player should die when hitting an enemy
+    * Use object tags to define what an "enemy" is
+  * [ ] Player should die when falling off the world
+    * Should also make sure to destroy enemies if they fall off the world
+  * [ ] Game states
+    * [ ] Title Screen
+    * [ ] Get ready...
+    * [ ] Game in progress
+    * [ ] Game over/dead
+    * [ ] Completed level
 * [ ] Add sounds
+  * [ ] Pew pew lasergun!
+  * [ ] Jump noise
 
 ## Resources
 

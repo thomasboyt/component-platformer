@@ -1,13 +1,17 @@
 import * as Pearl from 'pearl';
 
-import {Component, GameObject, Physical} from '../shim';
+import {
+  GameObject,
+  Component,
+  Physical,
+  AnimationManager,
+  AssetManager,
+  SpriteSheet,
+} from '../shim';
 
-import AnimationManager from './AnimationManager';
 import PlatformerPhysics, {BLOCK_TAG} from './PlatformerPhysics';
 import PlayerController from './PlayerController';
-import SpriteSheet from '../util/SpriteSheet';
-
-import AssetManager from './AssetManager';
+import BlorpController from './BlorpController';
 
 function renderPlayer(obj: GameObject, ctx: CanvasRenderingContext2D) {
   const phys = obj.getComponent(Physical);
@@ -20,6 +24,24 @@ function renderPlayer(obj: GameObject, ctx: CanvasRenderingContext2D) {
   const destY = phys.center.y - sprite.height / 2;
 
   if (!player.facingRight) {
+    ctx.scale(-1, 1);
+    destX = (destX * -1) - sprite.width;
+  }
+
+  sprite.draw(ctx, destX, destY);
+}
+
+function renderBlorp(obj: GameObject, ctx: CanvasRenderingContext2D) {
+  const phys = obj.getComponent(Physical);
+  const anim = obj.getComponent(AnimationManager);
+  const blorp = obj.getComponent(BlorpController);
+
+  const sprite = anim.getSprite();
+
+  let destX = phys.center.x - sprite.width / 2;
+  const destY = phys.center.y - sprite.height / 2;
+
+  if (!blorp.walkingRight) {
     ctx.scale(-1, 1);
     destX = (destX * -1) - sprite.width;
   }
@@ -40,6 +62,8 @@ function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
 export default class GameManager extends Component {
   gravityAccel: number = (5 / 10000);
 
+  player: GameObject;
+
   init() {
     const assetManager = this.getComponent(AssetManager);
 
@@ -49,10 +73,13 @@ export default class GameManager extends Component {
   }
 
   createWorld() {
-    const playerSheetImg = this.getComponent(AssetManager).assets.images['playerSheet'];
+    const playerSheetImg = this.getComponent(AssetManager).getImage('playerSheet');
     const playerSheet = new SpriteSheet(playerSheetImg, 20, 20);
 
-    const player = new GameObject({
+    const blorpSheetImg = this.getComponent(AssetManager).getImage('blorpSheet');
+    const blorpSheet = new SpriteSheet(blorpSheetImg, 13, 13);
+
+    this.player = new GameObject({
       // name is used for debug display and maybe lookups in the future?
       name: 'Player',
 
@@ -60,7 +87,7 @@ export default class GameManager extends Component {
         // add positioning to the world and make collidable
         new Physical({
           center: {
-            x: 300,
+            x: 100,
             y: 5,
           },
           size: {
@@ -114,12 +141,46 @@ export default class GameManager extends Component {
       ],
 
       render: renderPlatform,
-    })
+    });
+
+    const blorp = new GameObject({
+      name: 'Blorp',
+
+      components: [
+        new Physical({
+          center: {
+            x: 500,
+            y: 5
+          },
+          size: {
+            x: 13,
+            y: 13,
+          },
+        }),
+
+        new BlorpController(),
+
+        new PlatformerPhysics(),
+
+        new AnimationManager(blorpSheet, 'stand', {
+          stand: {
+            frames: [0],
+            frameLengthMs: null,
+          },
+          walk: {
+            frames: [1, 0],
+            frameLengthMs: null,
+          }
+        }),
+      ],
+
+      render: renderBlorp,
+    });
 
     // TODO: Abstract this away somewhere!!
     // createGameObject() factory?
-    this.game.entities.add(player, null);
-
+    this.game.entities.add(this.player, null);
+    this.game.entities.add(blorp, null);
     this.game.entities.add(platform, null);
   }
 }

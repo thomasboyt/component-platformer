@@ -1,11 +1,10 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject, Physical} from '../shim';
+import {Component, GameObject, Physical, AnimationManager} from '../shim';
 
 import PlatformerPhysics from './PlatformerPhysics';
-import AnimationManager from './AnimationManager';
 
 export default class PlayerController extends Component {
-  walkSpeed: number = 5 / 100;
+  walkSpeed: number = 5 / 1000;
   jumpSpeed: number = 2 / 100;
   facingRight: boolean = true;
 
@@ -15,12 +14,12 @@ export default class PlayerController extends Component {
     const anim = this.getComponent(AnimationManager);
 
     if (this.game.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
-      physical.vel.x = -this.walkSpeed;
+      physical.vel.x = -this.walkSpeed * dt;
       anim.set('walk');
       this.facingRight = false;
 
     } else if (this.game.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
-      physical.vel.x = this.walkSpeed;
+      physical.vel.x = this.walkSpeed * dt;
       anim.set('walk');
       this.facingRight = true;
 

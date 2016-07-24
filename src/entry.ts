@@ -1,10 +1,8 @@
 import GameManager from './components/GameManager';
-import AssetManager from './components/AssetManager';
-import AudioManager from './components/AudioManager';
 
 import assets from './assets';
 
-import {createGame} from './shim';
+import {createGame, AssetManager, AudioManager} from './shim';
 
 createGame({
   rootComponents: [

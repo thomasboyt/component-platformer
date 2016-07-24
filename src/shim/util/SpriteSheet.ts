@@ -9,6 +9,10 @@ export default class SpriteSheet {
   spriteHeight: number;
 
   constructor(img: HTMLImageElement, spriteWidth: number, spriteHeight: number) {
+    if (!img) {
+      throw new Error('nonexistent image')
+    }
+
     this.img = img;
     this.spriteWidth = spriteWidth;
     this.spriteHeight = spriteHeight;

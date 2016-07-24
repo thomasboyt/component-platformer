@@ -1,4 +1,4 @@
-import {Component} from '../shim';
+import Component from '../Component';
 import AssetManager from './AssetManager';
 
 /**
@@ -28,8 +28,7 @@ export default class AudioManager extends Component {
   }
 
   play(name: string) {
-    const audioMap = this.getComponent(AssetManager).assets.audio;
-    const sound = audioMap[name];
+    const sound = this.getComponent(AssetManager).getAudio(name);
 
     const src = this.ctx.createBufferSource();
     src.connect(this.volumeNode);

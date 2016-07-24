@@ -1,4 +1,4 @@
-import {Component, GameObject} from '../shim';
+import Component from '../Component';
 
 import Sprite from '../util/Sprite';
 import SpriteSheet from '../util/SpriteSheet';

@@ -1,4 +1,5 @@
-import {Component} from '../shim';
+import Component from '../Component';
+
 import AudioManager from './AudioManager';
 
 type AssetMap = {
@@ -20,7 +21,7 @@ type AssetCfg = {
 }
 
 export default class AssetManager extends Component {
-  assets: AssetMap;
+  private assets: AssetMap;
   numTotal: number;
   numLoaded: number = 0;
   audioCtx: AudioContext;
@@ -91,6 +92,26 @@ export default class AssetManager extends Component {
         xhr.send();
       }
     });
+  }
+
+  getImage(name: string): HTMLImageElement {
+    const image = this.assets.images[name];
+
+    if (!image) {
+      throw new Error(`No image asset named ${name}`);
+    }
+
+    return image;
+  }
+
+  getAudio(name: string): AudioBuffer {
+    const sound = this.assets.audio[name];
+
+    if (!sound) {
+      throw new Error(`No audio asset named ${name}`);
+    }
+
+    return sound;
   }
 
 }
