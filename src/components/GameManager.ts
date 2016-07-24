@@ -7,47 +7,12 @@ import {
   AnimationManager,
   AssetManager,
   SpriteSheet,
+  CanvasRenderer,
 } from '../shim';
 
 import PlatformerPhysics, {BLOCK_TAG} from './PlatformerPhysics';
 import PlayerController from './PlayerController';
 import BlorpController from './BlorpController';
-
-function renderPlayer(obj: GameObject, ctx: CanvasRenderingContext2D) {
-  const phys = obj.getComponent(Physical);
-  const anim = obj.getComponent(AnimationManager);
-  const player = obj.getComponent(PlayerController);
-
-  const sprite = anim.getSprite();
-
-  let destX = phys.center.x - sprite.width / 2;
-  const destY = phys.center.y - sprite.height / 2;
-
-  if (!player.facingRight) {
-    ctx.scale(-1, 1);
-    destX = (destX * -1) - sprite.width;
-  }
-
-  sprite.draw(ctx, destX, destY);
-}
-
-function renderBlorp(obj: GameObject, ctx: CanvasRenderingContext2D) {
-  const phys = obj.getComponent(Physical);
-  const anim = obj.getComponent(AnimationManager);
-  const blorp = obj.getComponent(BlorpController);
-
-  const sprite = anim.getSprite();
-
-  let destX = phys.center.x - sprite.width / 2;
-  const destY = phys.center.y - sprite.height / 2;
-
-  if (!blorp.walkingRight) {
-    ctx.scale(-1, 1);
-    destX = (destX * -1) - sprite.width;
-  }
-
-  sprite.draw(ctx, destX, destY);
-}
 
 function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
   const phys = obj.getComponent(Physical);
@@ -113,8 +78,6 @@ export default class GameManager extends Component {
         })
       ],
 
-      render: renderPlayer,
-
       // tags could be used in the future to allow lookups of specific instances of things
       // tag: ['player'],
 
@@ -137,10 +100,10 @@ export default class GameManager extends Component {
             x: 500,
             y: 25,
           },
-        })
-      ],
+        }),
 
-      render: renderPlatform,
+        new CanvasRenderer(renderPlatform),
+      ],
     });
 
     const blorp = new GameObject({
@@ -173,8 +136,6 @@ export default class GameManager extends Component {
           }
         }),
       ],
-
-      render: renderBlorp,
     });
 
     // TODO: Abstract this away somewhere!!

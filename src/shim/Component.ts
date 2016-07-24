@@ -13,6 +13,9 @@ abstract class Component {
   collision(other: GameObject) {
   }
 
+  render(ctx: CanvasRenderingContext2D) {
+  }
+
   /*
    * Convenience stuff that maps back to gameObject
    */

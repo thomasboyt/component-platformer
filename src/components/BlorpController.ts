@@ -25,6 +25,7 @@ export default class BlorpController extends Component {
 
       // if (Math.abs(xDiff) < 60 && Math.abs(yDiff) < 25) {
       walkDirection = xDiff > 0 ? 1 : -1;
+      anim.setScale(walkDirection, 1);
       // }
     }
 

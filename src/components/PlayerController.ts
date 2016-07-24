@@ -6,7 +6,6 @@ import PlatformerPhysics from './PlatformerPhysics';
 export default class PlayerController extends Component {
   walkSpeed: number = 5 / 1000;
   jumpSpeed: number = 2 / 100;
-  facingRight: boolean = true;
 
   update(dt: number) {
     const physical = this.getComponent(Physical);
@@ -16,15 +15,14 @@ export default class PlayerController extends Component {
     if (this.game.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
       physical.vel.x = -this.walkSpeed * dt;
       anim.set('walk');
-      this.facingRight = false;
+      anim.setScale(-1, 1);
 
     } else if (this.game.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
       physical.vel.x = this.walkSpeed * dt;
       anim.set('walk');
-      this.facingRight = true;
+      anim.setScale(1, 1);
 
     } else {
-      // TODO: this should maybe use other stuff
       physical.vel.x = 0;
       anim.set('stand');
     }

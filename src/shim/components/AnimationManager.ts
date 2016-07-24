@@ -1,4 +1,5 @@
 import Component from '../Component';
+import Physical from './Physical';
 
 import Sprite from '../util/Sprite';
 import SpriteSheet from '../util/SpriteSheet';
@@ -69,6 +70,9 @@ export default class AnimationManager extends Component {
   private _currentState: string;
   private _current: Animation;
 
+  private scaleX: number = 1;
+  private scaleY: number = 1;
+
   constructor(sheet: SpriteSheet, initialState: string, animations: AnimationConfigMap) {
     super();
     this._sheet = sheet;
@@ -86,11 +90,30 @@ export default class AnimationManager extends Component {
     this._current = new Animation(this._sheet, cfg);
   }
 
-  getSprite(): Sprite {
-    return this._current.getSprite();
+  setScale(sx: number, sy: number) {
+    this.scaleX = sx;
+    this.scaleY = sy;
   }
 
   update(dt: number) {
     this._current.update(dt);
+  }
+
+  render(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+
+    const phys = this.getComponent(Physical);
+
+    ctx.translate(phys.center.x, phys.center.y);
+
+    const sprite = this._current.getSprite();
+
+    const destX = -sprite.width / 2;
+    const destY = -sprite.height / 2;
+
+    ctx.scale(this.scaleX, this.scaleY);
+
+    sprite.draw(ctx, destX, destY);
+    ctx.restore();
   }
 }
