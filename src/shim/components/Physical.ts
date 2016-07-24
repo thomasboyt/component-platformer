@@ -1,6 +1,6 @@
 import * as Pearl from 'pearl';
-import GameObject from './GameObject';
-import Component from './Component';
+import GameObject from '../GameObject';
+import Component from '../Component';
 
 export interface PhysicalSettings {
   center?: Pearl.Coordinates;

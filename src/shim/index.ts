@@ -1,11 +1,11 @@
 import GameObject from './GameObject';
 import Component from './Component';
-import Physical from './Physical';
 import Game from './Game';
 
 import Sprite from './util/Sprite';
 import SpriteSheet from './util/SpriteSheet';
 
+import Physical from './components/Physical';
 import AnimationManager from './components/AnimationManager';
 import AssetManager from './components/AssetManager';
 import AudioManager from './components/AudioManager';
@@ -13,9 +13,9 @@ import AudioManager from './components/AudioManager';
 export {
   GameObject,
   Component,
-  Physical,
   AnimationManager,
   AssetManager,
+  Physical,
   AudioManager,
   Sprite,
   SpriteSheet,

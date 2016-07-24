@@ -1,6 +1,6 @@
 import * as Pearl from 'pearl';
 
-import Physical from './Physical';
+import Physical from './components/Physical';
 import Component from './Component';
 import Game from './Game';
 
