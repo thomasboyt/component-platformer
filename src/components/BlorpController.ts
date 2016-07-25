@@ -5,8 +5,8 @@ import PlatformerPhysics from './PlatformerPhysics';
 import GameManager from './GameManager';
 
 export default class BlorpController extends Component {
-  walkSpeed: number = 5 / 1000;
-  jumpSpeed: number = 2 / 100;
+  walkSpeed: number = 5 / 100;
+  jumpSpeed: number = 2 / 10;
   walkingRight: boolean = true;
 
   update(dt: number) {
@@ -29,7 +29,7 @@ export default class BlorpController extends Component {
       // }
     }
 
-    phys.vel.x = walkDirection * this.walkSpeed * dt;
+    phys.vel.x = walkDirection * this.walkSpeed;
 
     if (phys.vel.x && platformerPhysics.grounded) {
       anim.set('walk');
