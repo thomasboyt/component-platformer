@@ -43,6 +43,9 @@ export default class PlayerController extends Component {
   private shoot() {
     const bullet = new GameObject({
       name: 'Bullet',
+
+      tags: ['Bullet'],
+
       components: [
         // initial location will be filled in by BulletController
         new Physical(),

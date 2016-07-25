@@ -40,11 +40,11 @@ One simple single-screen level should suffice. The player's goal is to collect s
 * [x] Add asset loader
 * [x] Add spritesheet, animations for player character
 * [ ] Add asset loading UI
-* [ ] Add gun
-  * [ ] Add bullets
+* [x] Add bullet firing
 * [ ] Add enemies, enemy AI
   * [ ] Implement Blorp
     * [ ] Blorp should change directions when it hits a wall
+    * [x] Blorp should get sploded when it's hit by a bullet
 * [ ] Add pickups (coins?)
 * [ ] Implement game rules
   * [ ] Player should die when hitting an enemy

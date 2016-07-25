@@ -39,5 +39,9 @@ export default class BlorpController extends Component {
   }
 
   collision(other: GameObject) {
+    if (other.hasTag('Bullet')) {
+      this.game.entities.destroy(this.gameObject);
+      this.game.entities.destroy(other);
+    }
   }
 }
