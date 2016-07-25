@@ -5,6 +5,8 @@ import PlatformerPhysics from './PlatformerPhysics';
 import {Intersection} from '../util/math';
 import GameManager from './GameManager';
 
+import * as Tags from '../Tags';
+
 export default class BlorpController extends Component {
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 2 / 10;
@@ -45,7 +47,7 @@ export default class BlorpController extends Component {
   }
 
   collision(other: GameObject) {
-    if (other.hasTag('Bullet')) {
+    if (other.hasTag(Tags.bullet)) {
       this.game.entities.destroy(this.gameObject);
       this.game.entities.destroy(other);
     }
