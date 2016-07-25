@@ -1,7 +1,7 @@
 import {Component, GameObject, Physical} from '../shim';
 
 interface Opts {
-  direction: 'left' | 'right',
+  direction: 'left' | 'right' | 'up' | 'down',
   creator: GameObject,
 }
 
