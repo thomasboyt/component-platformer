@@ -1,12 +1,36 @@
 import * as Pearl from 'pearl';
 import {Component, GameObject, Physical} from '../shim';
 import GameManager from './GameManager';
-import {rectangleIntersection} from '../util/math';
+import {rectangleIntersection, Intersection} from '../util/math';
 
-export const BLOCK_TAG = 'Block';
+import * as Tags from '../Tags';
+
+interface Listener<T> {
+  (data: T): void;
+}
+
+class Delegate<T> {
+  private listeners: Set<Listener<T>> = new Set();
+
+  add(fn: Listener<T>) {
+    this.listeners.add(fn);
+  }
+
+  remove(fn: Listener<T>) {
+    this.listeners.delete(fn);
+  }
+
+  call(data: T) {
+    this.listeners.forEach((fn: Listener<T>) => {
+      fn(data);
+    });
+  }
+}
 
 export default class PlatformerPhysics extends Component {
   grounded: boolean = false;
+
+  afterBlockCollision: Delegate<Intersection> = new Delegate<Intersection>();
 
   update(dt: number) {
     const physical = this.getComponent(Physical);
@@ -20,9 +44,8 @@ export default class PlatformerPhysics extends Component {
 
   collision(other: GameObject) {
     const phys = this.getComponent(Physical);
-    const plat = this.getComponent(PlatformerPhysics);
 
-    if (other.hasTag(BLOCK_TAG)) {
+    if (other.hasTag(Tags.block)) {
       const intersect = rectangleIntersection(
         phys,
         other.getComponent(Physical)
@@ -36,7 +59,7 @@ export default class PlatformerPhysics extends Component {
 
           if (phys.vel.y > 0) {
             phys.vel.y = 0;
-            plat.grounded = true;
+            this.grounded = true;
           }
 
         // Self is rising into a block from below
@@ -58,6 +81,14 @@ export default class PlatformerPhysics extends Component {
           phys.center.x += intersect.w;
         }
       }
+
+      this.afterBlockCollision.call(intersect);
+      // for (let component of this.getComponents()) {
+      //   if (component.afterBlockCollision) {
+      //     component.afterBlockCollision(other, intersect);
+      //   }
+      // }
+      // this.sendMessage('afterBlockCollision', other, intersect);
     }
   }
 }

@@ -12,7 +12,7 @@ createGame({
   ],
 
   canvas: document.getElementById('canvas') as HTMLCanvasElement,
-  width: 640,
-  height: 480,
+  width: 400,
+  height: 400,
   backgroundColor: 'black',
 });

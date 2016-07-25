@@ -15,7 +15,7 @@ type SidePositions = {
   bottom: number;
 }
 
-type Intersection = {
+export type Intersection = {
   sides: SidePositions;
   w: number;
   h: number;

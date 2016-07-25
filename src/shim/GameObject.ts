@@ -68,6 +68,14 @@ export default class GameObject extends Pearl.Entity<null> {
     return c;
   }
 
+  sendMessage(name: string, ...args: any[]) {
+    for (let component of this.components) {
+      if (typeof component[name] === 'function') {
+        component[name](...args);
+      }
+    }
+  }
+
   /* Pearl.Entity compatibility */
 
   init() {

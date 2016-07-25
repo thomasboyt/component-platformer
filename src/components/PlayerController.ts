@@ -3,6 +3,7 @@ import {Component, GameObject, Physical, AnimationManager, CanvasRenderer} from 
 
 import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
+import * as Tags from '../Tags';
 
 export default class PlayerController extends Component {
   walkSpeed: number = 5 / 100;
@@ -44,7 +45,7 @@ export default class PlayerController extends Component {
     const bullet = new GameObject({
       name: 'Bullet',
 
-      tags: ['Bullet'],
+      tags: [Tags.bullet],
 
       components: [
         // initial location will be filled in by BulletController
@@ -70,5 +71,11 @@ export default class PlayerController extends Component {
     });
 
     this.game.entities.add(bullet, null);
+  }
+
+  collision(other: GameObject) {
+    if (other.hasTag(Tags.enemy)) {
+      this.game.entities.destroy(this.gameObject);
+    }
   }
 }

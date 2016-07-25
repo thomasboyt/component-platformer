@@ -10,9 +10,11 @@ import {
   CanvasRenderer,
 } from '../shim';
 
-import PlatformerPhysics, {BLOCK_TAG} from './PlatformerPhysics';
+import PlatformerPhysics from './PlatformerPhysics';
 import PlayerController from './PlayerController';
 import BlorpController from './BlorpController';
+
+import * as Tags from '../Tags';
 
 function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
   const phys = obj.getComponent(Physical);
@@ -29,10 +31,15 @@ export default class GameManager extends Component {
 
   player: GameObject;
 
+  blorpSheet: SpriteSheet;
+
   init() {
     const assetManager = this.getComponent(AssetManager);
 
     assetManager.load().then(() => {
+      const blorpSheetImg = this.getComponent(AssetManager).getImage('blorpSheet');
+      this.blorpSheet = new SpriteSheet(blorpSheetImg, 13, 13);
+
       this.createWorld();
     });
   }
@@ -41,8 +48,18 @@ export default class GameManager extends Component {
     const playerSheetImg = this.getComponent(AssetManager).getImage('playerSheet');
     const playerSheet = new SpriteSheet(playerSheetImg, 20, 20);
 
-    const blorpSheetImg = this.getComponent(AssetManager).getImage('blorpSheet');
-    const blorpSheet = new SpriteSheet(blorpSheetImg, 13, 13);
+    // 400 x 400
+    this.createPlatform(0, 0, 20, 400);
+    this.createPlatform(380, 0, 20, 400);
+
+    this.createPlatform(150, 80, 100, 20);
+    this.createPlatform(200, 170, 180, 20);
+    this.createPlatform(50, 230, 125, 20);
+    this.createPlatform(150, 290, 100, 20);
+    this.createPlatform(20, 370, 100, 20);
+    this.createPlatform(280, 370, 100, 20);
+
+    this.createBlorp(200, 70);
 
     this.player = new GameObject({
       // name is used for debug display and maybe lookups in the future?
@@ -52,8 +69,8 @@ export default class GameManager extends Component {
         // add positioning to the world and make collidable
         new Physical({
           center: {
-            x: 100,
-            y: 5,
+            x: 50,
+            y: 360,
           },
           size: {
             x: 11,
@@ -78,27 +95,34 @@ export default class GameManager extends Component {
         })
       ],
 
-      // tags could be used in the future to allow lookups of specific instances of things
-      // tag: ['player'],
-
       // might be useful to be able to specify zIndex here, too?
       // zIndex: 0,
     });
 
+
+    // TODO: Abstract this away somewhere!!
+    // createGameObject() factory?
+    this.game.entities.add(this.player, null);
+  }
+
+  private createPlatform(x: number, y: number, width: number, height: number) {
+    const cx = x + width / 2;
+    const cy = y + height / 2;
+
     const platform = new GameObject({
       name: 'Platform',
 
-      tags: [BLOCK_TAG],
+      tags: [Tags.block],
 
       components: [
         new Physical({
           center: {
-            x: 300,
-            y: 300,
+            x: cx,
+            y: cy,
           },
           size: {
-            x: 500,
-            y: 25,
+            x: width,
+            y: height,
           },
         }),
 
@@ -106,14 +130,20 @@ export default class GameManager extends Component {
       ],
     });
 
+    this.game.entities.add(platform, null);
+  }
+
+  private createBlorp(x: number, y: number) {
     const blorp = new GameObject({
       name: 'Blorp',
+
+      tags: [Tags.enemy],
 
       components: [
         new Physical({
           center: {
-            x: 500,
-            y: 5
+            x: x,
+            y: y
           },
           size: {
             x: 13,
@@ -125,7 +155,7 @@ export default class GameManager extends Component {
 
         new PlatformerPhysics(),
 
-        new AnimationManager(blorpSheet, 'stand', {
+        new AnimationManager(this.blorpSheet, 'stand', {
           stand: {
             frames: [0],
             frameLengthMs: null,
@@ -138,10 +168,6 @@ export default class GameManager extends Component {
       ],
     });
 
-    // TODO: Abstract this away somewhere!!
-    // createGameObject() factory?
-    this.game.entities.add(this.player, null);
     this.game.entities.add(blorp, null);
-    this.game.entities.add(platform, null);
   }
 }
