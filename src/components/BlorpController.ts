@@ -4,16 +4,23 @@ import {Component, GameObject, Physical, AnimationManager} from '../shim';
 import PlatformerPhysics from './PlatformerPhysics';
 import {Intersection} from '../util/math';
 import WorldManager from './WorldManager';
-import GameManager from './GameManager';
 
 import * as Tags from '../Tags';
 
-export default class BlorpController extends Component<{}> {
+interface Options {
+  world: GameObject;
+}
+
+export default class BlorpController extends Component<Options> {
+  private world: GameObject;
+
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 2 / 10;
   walkingRight: boolean = true;
 
-  init() {
+  init(opts: Options) {
+    this.world = opts.world;
+
     const plat = this.getComponent(PlatformerPhysics);
     plat.afterBlockCollision.add((data) => this.afterBlockCollision(data));
   }
@@ -25,9 +32,7 @@ export default class BlorpController extends Component<{}> {
 
     let walkDirection = this.walkingRight ? 1 : -1;
 
-    // TODO: THIS SUCKS
-    const player = this.game.obj.getComponent(GameManager).world!.getComponent(WorldManager).player;
-
+    const player = this.world.getComponent(WorldManager).player;
     const playerCenter = player.getComponent(Physical).center;
 
     if (player) {

@@ -140,7 +140,9 @@ export default class WorldManager extends Component<{}> {
           },
         }),
 
-        new BlorpController(),
+        new BlorpController({
+          world: this.gameObject,
+        }),
 
         new PlatformerPhysics(),
 
