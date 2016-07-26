@@ -6,25 +6,15 @@ import {
   Physical,
   AnimationManager,
   SpriteSheet,
-  CanvasRenderer,
 } from '../shim';
 
 import GameManager from './GameManager';
 import PlatformerPhysics from './PlatformerPhysics';
 import PlayerController from './PlayerController';
 import BlorpController from './BlorpController';
+import PlatformRenderer from './render/PlatformRenderer';
 
 import * as Tags from '../Tags';
-
-function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
-  const phys = obj.getComponent(Physical);
-
-  ctx.fillStyle = 'white';
-  ctx.fillRect(phys.center.x - phys.size.x / 2,
-               phys.center.y - phys.size.y / 2,
-               phys.size.x,
-               phys.size.y);
-}
 
 export default class WorldManager extends Component<{}> {
   // Object references
@@ -113,9 +103,7 @@ export default class WorldManager extends Component<{}> {
           },
         }),
 
-        new CanvasRenderer({
-          renderFn: renderPlatform
-        }),
+        new PlatformRenderer(),
       ],
     });
 

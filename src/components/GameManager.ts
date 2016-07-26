@@ -5,30 +5,10 @@ import {
   Component,
   AssetManager,
   SpriteSheet,
-  CanvasRenderer,
 } from '../shim';
 
 import WorldManager from './WorldManager';
 import TitleScreenController from './TitleScreenController';
-
-function renderTitle(obj: GameObject, ctx: CanvasRenderingContext2D) {
-  ctx.fillStyle = '#CEE682';
-
-  ctx.textAlign = 'center';
-
-  ctx.font = '40px "Press Start 2P"';
-  ctx.fillText('BLORP', 210, 150);
-
-  ctx.font = '16px "Press Start 2P"';
-  ctx.fillText('a demo game', 210, 180);
-
-  const offset = 250;
-
-  ctx.fillText('arrows move', 200, offset);
-  ctx.fillText('space jumps', 200, offset + 20);
-  ctx.fillText('shift shoots', 200, offset + 40);
-  ctx.fillText("press space to start", 200, offset +  80);
-}
 
 export default class GameManager extends Component<{}> {
   // Game settings
@@ -60,9 +40,6 @@ export default class GameManager extends Component<{}> {
       name: 'TitleScreen',
 
       components: [
-        new CanvasRenderer({
-          renderFn: renderTitle,
-        }),
         new TitleScreenController({
           onAdvance: () => this.handleAdvanceTitle(),
         }),

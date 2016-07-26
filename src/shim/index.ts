@@ -9,7 +9,6 @@ import Physical from './components/Physical';
 import AnimationManager from './components/AnimationManager';
 import AssetManager from './components/AssetManager';
 import AudioManager from './components/AudioManager';
-import CanvasRenderer from './components/CanvasRenderer';
 
 export {
   GameObject,
@@ -20,7 +19,6 @@ export {
   AudioManager,
   Sprite,
   SpriteSheet,
-  CanvasRenderer,
 }
 
 interface CreateGameOpts {

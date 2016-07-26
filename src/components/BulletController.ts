@@ -46,4 +46,15 @@ export default class BulletController extends Component<Opts> {
   update(dt: number) {
     // TODO: Detect if bullet goes off screen and destroy if so
   }
+  
+  render(ctx: CanvasRenderingContext2D) {
+    const phys = this.getComponent(Physical);
+    ctx.fillStyle = 'red';
+
+    ctx.fillRect(
+      phys.center.x - phys.size.x / 2,
+      phys.center.y - phys.size.y / 2,
+      phys.size.x,
+      phys.size.y);
+  }
 }

@@ -1,5 +1,5 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject, Physical, AnimationManager, CanvasRenderer} from '../shim';
+import {Component, GameObject, Physical, AnimationManager} from '../shim';
 
 import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
@@ -54,20 +54,6 @@ export default class PlayerController extends Component<{}> {
         new BulletController({
           creator: this.gameObject,
           direction: this.facingLeft ? 'left' : 'right',
-        }),
-
-        // TODO: this is a bad place for this
-        new CanvasRenderer({
-          renderFn: (obj: GameObject, ctx: CanvasRenderingContext2D) => {
-            const phys = obj.getComponent(Physical);
-            ctx.fillStyle = 'red';
-
-            ctx.fillRect(
-              phys.center.x - phys.size.x / 2,
-              phys.center.y - phys.size.y / 2,
-              phys.size.x,
-              phys.size.y);
-          },
         }),
       ],
     });
