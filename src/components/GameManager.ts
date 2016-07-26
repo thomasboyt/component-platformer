@@ -3,35 +3,43 @@ import * as Pearl from 'pearl';
 import {
   GameObject,
   Component,
-  Physical,
-  AnimationManager,
   AssetManager,
   SpriteSheet,
   CanvasRenderer,
 } from '../shim';
 
-import PlatformerPhysics from './PlatformerPhysics';
-import PlayerController from './PlayerController';
-import BlorpController from './BlorpController';
+import WorldManager from './WorldManager';
+import TitleScreenController from './TitleScreenController';
 
-import * as Tags from '../Tags';
+function renderTitle(obj: GameObject, ctx: CanvasRenderingContext2D) {
+  ctx.fillStyle = '#CEE682';
 
-function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
-  const phys = obj.getComponent(Physical);
+  ctx.textAlign = 'center';
 
-  ctx.fillStyle = 'white';
-  ctx.fillRect(phys.center.x - phys.size.x / 2,
-               phys.center.y - phys.size.y / 2,
-               phys.size.x,
-               phys.size.y);
+  ctx.font = '40px "Press Start 2P"';
+  ctx.fillText('BLORP', 210, 150);
+
+  ctx.font = '16px "Press Start 2P"';
+  ctx.fillText('a demo game', 210, 180);
+
+  const offset = 250;
+
+  ctx.fillText('arrows move', 200, offset);
+  ctx.fillText('space jumps', 200, offset + 20);
+  ctx.fillText('shift shoots', 200, offset + 40);
+  ctx.fillText("press space to start", 200, offset +  80);
 }
 
 export default class GameManager extends Component<{}> {
+  // Game settings
   gravityAccel: number = (5 / 10000);
 
-  player: GameObject;
+  // Object references
+  title: GameObject | null = null;
+  world: GameObject | null = null;
 
   blorpSheet: SpriteSheet;
+  playerSheet: SpriteSheet;
 
   init() {
     const assetManager = this.getComponent(AssetManager);
@@ -40,144 +48,42 @@ export default class GameManager extends Component<{}> {
       const blorpSheetImg = this.getComponent(AssetManager).getImage('blorpSheet');
       this.blorpSheet = new SpriteSheet(blorpSheetImg, 13, 13);
 
-      this.createWorld();
+      const playerSheetImg = this.getComponent(AssetManager).getImage('playerSheet');
+      this.playerSheet = new SpriteSheet(playerSheetImg, 20, 20);
+
+      this.showTitle();
     });
   }
 
-  createWorld() {
-    const playerSheetImg = this.getComponent(AssetManager).getImage('playerSheet');
-    const playerSheet = new SpriteSheet(playerSheetImg, 20, 20);
-
-    // 400 x 400
-    this.createPlatform(0, 0, 20, 400);
-    this.createPlatform(380, 0, 20, 400);
-
-    this.createPlatform(150, 80, 100, 20);
-    this.createPlatform(200, 170, 180, 20);
-    this.createPlatform(50, 230, 125, 20);
-    this.createPlatform(150, 290, 100, 20);
-    this.createPlatform(20, 370, 100, 20);
-    this.createPlatform(280, 370, 100, 20);
-
-    this.createBlorp(200, 70);
-
-    this.player = new GameObject({
-      // name is used for debug display and maybe lookups in the future?
-      name: 'Player',
+  showTitle() {
+    this.title = new GameObject({
+      name: 'TitleScreen',
 
       components: [
-        // add positioning to the world and make collidable
-        new Physical({
-          center: {
-            x: 50,
-            y: 360,
-          },
-          size: {
-            x: 11,
-            y: 20,
-          }
-        }),
-        // add controls to allow player to move left/right and jump
-        new PlayerController(),
-
-        // add platformer physics to apply gravity and collision with platforms
-        new PlatformerPhysics(),
-
-        new AnimationManager({
-          sheet: playerSheet,
-          initialState: 'stand',
-          animations: {
-            stand: {
-              frames: [0],
-              frameLengthMs: null,
-            },
-            walk: {
-              frames: [1, 0],
-              frameLengthMs: 200,
-            }
-          },
-        })
-      ],
-
-      // might be useful to be able to specify zIndex here, too?
-      // zIndex: 0,
-    });
-
-
-    // TODO: Abstract this away somewhere!!
-    // createGameObject() factory?
-    this.game.entities.add(this.player, null);
-  }
-
-  private createPlatform(x: number, y: number, width: number, height: number) {
-    const cx = x + width / 2;
-    const cy = y + height / 2;
-
-    const platform = new GameObject({
-      name: 'Platform',
-
-      tags: [Tags.block],
-
-      components: [
-        new Physical({
-          center: {
-            x: cx,
-            y: cy,
-          },
-          size: {
-            x: width,
-            y: height,
-          },
-        }),
-
         new CanvasRenderer({
-          renderFn: renderPlatform
+          renderFn: renderTitle,
+        }),
+        new TitleScreenController({
+          onAdvance: () => this.handleAdvanceTitle(),
         }),
       ],
     });
 
-    this.game.entities.add(platform, null);
+    this.game.entities.add(this.title, null);
   }
 
-  private createBlorp(x: number, y: number) {
-    const blorp = new GameObject({
-      name: 'Blorp',
+  handleAdvanceTitle() {
+    this.game.entities.destroy(this.title!);
+    this.title = null;
 
-      tags: [Tags.enemy],
+    this.world = new GameObject({
+      name: 'World',
 
       components: [
-        new Physical({
-          center: {
-            x: x,
-            y: y
-          },
-          size: {
-            x: 13,
-            y: 13,
-          },
-        }),
-
-        new BlorpController(),
-
-        new PlatformerPhysics(),
-
-        new AnimationManager({
-          sheet: this.blorpSheet,
-          initialState: 'stand',
-          animations: {
-            stand: {
-              frames: [0],
-              frameLengthMs: null,
-            },
-            walk: {
-              frames: [1, 0],
-              frameLengthMs: null,
-            }
-          },
-        }),
+        new WorldManager(),
       ],
     });
 
-    this.game.entities.add(blorp, null);
+    this.game.entities.add(this.world, null);
   }
 }
