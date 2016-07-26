@@ -8,8 +8,14 @@ I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.
 
 ## Design Questions
 
+* [ ] How are objects created/destroyed?
+  * Figure out better API for `entities.add`/`entities.destroy`
+  * Maybe `this.createObject({...})` / `this.destroyObject({...})`
+  * Add destroy hooks to components
+  * This totally fucks with some of the object-lookup stuff... this system really should make sure you avoid manually managing object references, so that you can never reference a destroyed object...
+    * http://answers.unity3d.com/questions/10032/does-unity-null-all-references-to-a-gameobject-aft.html
 * [ ] What is a component responsible for? Standardize and document.
-  * Should components be able to *render*? Currently rendering is a separate function defined on the GameObject.
+  * [x] Should components be able to *render*? Currently rendering is a separate function defined on the GameObject.
   * https://docs.unity3d.com/Manual/class-SpriteRenderer.html
 * [ ] How are "game controller" level components handled?
   * Singleton example in Unity: https://unity3d.com/learn/tutorials/projects/2d-roguelike-tutorial/writing-game-manager
@@ -21,6 +27,7 @@ I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.
   * By name: http://docs.unity3d.com/ScriptReference/GameObject.Find.html
   * By tag: http://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
   * Unity has the concept of a "component tree" that's based around the `Transform` component, so you can e.g. look up "child objects"
+  * **Currently**: Objects are passed through as arguments, which works as long as you're very careful about not leaving around extra references to destroyed objects! Probably should just codify this as a tree...
 * [ ] Begin figuring out what dev tooling around components looks like: how are components visualized?
 * [ ] Currently, there are order-dependent update chains. Is this okay? Should this be codified?
   * For example: `PlayerController` has to be applied *before* `PlatformerPhysics`, or things feel really laggy since they're not applied for a whole frame.
@@ -55,6 +62,7 @@ One simple single-screen level should suffice. The player's goal is to collect s
 * [ ] Implement game rules
   * [ ] Player should die when hitting an enemy
     * Use object tags to define what an "enemy" is
+    * This is half-implemented but the player still persists in the object graph...
   * [ ] Player should die when falling off the world
     * Should also make sure to destroy enemies if they fall off the world
   * [ ] Game states
