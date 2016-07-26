@@ -6,7 +6,7 @@ import Game from './Game';
 
 export interface CreateOpts {
   name: string;
-  components: Component[];
+  components: Component<any>[];
   zIndex?: number;
   tags?: string[];
 }
@@ -15,7 +15,7 @@ export default class GameObject extends Pearl.Entity<null> {
   game: Game;
 
   private name: string;
-  private components: Component[] = [];
+  private components: Component<any>[] = [];
   private tags: string[] = [];
 
   constructor(opts: CreateOpts) {
@@ -36,7 +36,7 @@ export default class GameObject extends Pearl.Entity<null> {
     }
   }
 
-  private addComponent(component: Component) {
+  private addComponent(component: Component<any>) {
     component.gameObject = this;
     this.components.push(component);
   }
@@ -46,7 +46,7 @@ export default class GameObject extends Pearl.Entity<null> {
     return !!this.tags.find((val) => val === tag);
   }
 
-  maybeGetComponent<T extends Component>(componentType: {new(...args: any[]): T}): T | null {
+  maybeGetComponent<T extends Component<any>>(componentType: {new(...args: any[]): T}): T | null {
     const c = this.components.find((component) => component instanceof componentType);
 
     if (!c) {
@@ -58,7 +58,7 @@ export default class GameObject extends Pearl.Entity<null> {
     return c as T;
   }
 
-  getComponent<T extends Component>(componentType: {new(...args: any[]): T}): T {
+  getComponent<T extends Component<any>>(componentType: {new(...args: any[]): T}): T {
     const c = this.maybeGetComponent(componentType);
 
     if (!c) {
@@ -81,7 +81,7 @@ export default class GameObject extends Pearl.Entity<null> {
   init() {
     // game is set at this point
     for (let component of this.components) {
-      component.init();
+      component.init(component.initialSettings);
     }
   }
 

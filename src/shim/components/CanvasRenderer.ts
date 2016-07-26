@@ -3,12 +3,15 @@ import GameObject from '../GameObject';
 
 export type renderFn = (obj: GameObject, ctx: CanvasRenderingContext2D) => void;
 
-export default class CanvasRenderer extends Component {
+interface Options {
+  renderFn: renderFn;
+}
+
+export default class CanvasRenderer extends Component<Options> {
   private renderFn: renderFn;
 
-  constructor(renderFn: renderFn) {
-    super();
-    this.renderFn = renderFn;
+  init(opts: Options) {
+    this.renderFn = opts.renderFn;
   }
 
   render(ctx: CanvasRenderingContext2D) {

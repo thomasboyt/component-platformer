@@ -26,7 +26,7 @@ function renderPlatform(obj: GameObject, ctx: CanvasRenderingContext2D) {
                phys.size.y);
 }
 
-export default class GameManager extends Component {
+export default class GameManager extends Component<{}> {
   gravityAccel: number = (5 / 10000);
 
   player: GameObject;
@@ -83,15 +83,19 @@ export default class GameManager extends Component {
         // add platformer physics to apply gravity and collision with platforms
         new PlatformerPhysics(),
 
-        new AnimationManager(playerSheet, 'stand', {
-          stand: {
-            frames: [0],
-            frameLengthMs: null,
+        new AnimationManager({
+          sheet: playerSheet,
+          initialState: 'stand',
+          animations: {
+            stand: {
+              frames: [0],
+              frameLengthMs: null,
+            },
+            walk: {
+              frames: [1, 0],
+              frameLengthMs: 200,
+            }
           },
-          walk: {
-            frames: [1, 0],
-            frameLengthMs: 200,
-          }
         })
       ],
 
@@ -126,7 +130,9 @@ export default class GameManager extends Component {
           },
         }),
 
-        new CanvasRenderer(renderPlatform),
+        new CanvasRenderer({
+          renderFn: renderPlatform
+        }),
       ],
     });
 
@@ -155,15 +161,19 @@ export default class GameManager extends Component {
 
         new PlatformerPhysics(),
 
-        new AnimationManager(this.blorpSheet, 'stand', {
-          stand: {
-            frames: [0],
-            frameLengthMs: null,
+        new AnimationManager({
+          sheet: this.blorpSheet,
+          initialState: 'stand',
+          animations: {
+            stand: {
+              frames: [0],
+              frameLengthMs: null,
+            },
+            walk: {
+              frames: [1, 0],
+              frameLengthMs: null,
+            }
           },
-          walk: {
-            frames: [1, 0],
-            frameLengthMs: null,
-          }
         }),
       ],
     });

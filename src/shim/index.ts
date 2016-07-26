@@ -24,7 +24,7 @@ export {
 }
 
 interface CreateGameOpts {
-  rootComponents: Component[],
+  rootComponents: Component<any>[],
   canvas: HTMLCanvasElement,
   width: number;
   height: number;

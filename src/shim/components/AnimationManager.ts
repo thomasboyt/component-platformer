@@ -64,7 +64,13 @@ interface AnimationConfigMap {
   [key: string]: AnimationConfig;
 }
 
-export default class AnimationManager extends Component {
+interface Options {
+  sheet: SpriteSheet;
+  initialState: string;
+  animations: AnimationConfigMap;
+}
+
+export default class AnimationManager extends Component<Options> {
   private _sheet: SpriteSheet;
   private _animationConfig: AnimationConfigMap;
   private _currentState: string;
@@ -73,11 +79,10 @@ export default class AnimationManager extends Component {
   private scaleX: number = 1;
   private scaleY: number = 1;
 
-  constructor(sheet: SpriteSheet, initialState: string, animations: AnimationConfigMap) {
-    super();
-    this._sheet = sheet;
-    this._animationConfig = animations;
-    this.set(initialState);
+  init(opts: Options) {
+    this._sheet = opts.sheet;
+    this._animationConfig = opts.animations;
+    this.set(opts.initialState);
   }
 
   set(state: string) {

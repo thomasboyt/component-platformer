@@ -7,7 +7,9 @@ import {createGame, AssetManager, AudioManager} from './shim';
 createGame({
   rootComponents: [
     new AssetManager(assets),
-    new AudioManager(1),
+    new AudioManager({
+      defaultGain: 1
+    }),
     new GameManager(),
   ],
 

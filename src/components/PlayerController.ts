@@ -5,7 +5,7 @@ import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
 import * as Tags from '../Tags';
 
-export default class PlayerController extends Component {
+export default class PlayerController extends Component<{}> {
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 3 / 10;
   facingLeft: boolean = true;
@@ -57,15 +57,17 @@ export default class PlayerController extends Component {
         }),
 
         // TODO: this is a bad place for this
-        new CanvasRenderer((obj: GameObject, ctx: CanvasRenderingContext2D) => {
-          const phys = obj.getComponent(Physical);
-          ctx.fillStyle = 'red';
+        new CanvasRenderer({
+          renderFn: (obj: GameObject, ctx: CanvasRenderingContext2D) => {
+            const phys = obj.getComponent(Physical);
+            ctx.fillStyle = 'red';
 
-          ctx.fillRect(
-            phys.center.x - phys.size.x / 2,
-            phys.center.y - phys.size.y / 2,
-            phys.size.x,
-            phys.size.y);
+            ctx.fillRect(
+              phys.center.x - phys.size.x / 2,
+              phys.center.y - phys.size.y / 2,
+              phys.size.x,
+              phys.size.y);
+          },
         }),
       ],
     });

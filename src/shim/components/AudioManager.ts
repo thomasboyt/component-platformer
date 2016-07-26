@@ -1,6 +1,10 @@
 import Component from '../Component';
 import AssetManager from './AssetManager';
 
+interface Options {
+  defaultGain: number;
+}
+
 /**
  * Provides a single location for playing audio assets loaded through `AudioManager`.
  *
@@ -8,21 +12,19 @@ import AssetManager from './AssetManager';
  *   // Will play the asset with the key of `explosion` in your assets configuration.
  *   audioManager.play('explosion');
  */
-export default class AudioManager extends Component {
+export default class AudioManager extends Component<Options> {
   ctx: AudioContext;
   muted: boolean;
   volumeNode: GainNode;
   defaultGain: number;
 
-  constructor(defaultGain: number) {
-    super();
-
+  init(opts: Options) {
     this.ctx = new AudioContext();
 
     this.volumeNode = this.ctx.createGain();
     this.volumeNode.connect(this.ctx.destination);
 
-    this.volumeNode.gain.value = defaultGain;
+    this.volumeNode.gain.value = opts.defaultGain;
 
     this.muted = false;
   }

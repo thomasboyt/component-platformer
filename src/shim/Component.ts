@@ -1,10 +1,16 @@
 import GameObject from './GameObject';
 import Game from './Game';
 
-abstract class Component {
+abstract class Component<Settings> {
   gameObject: GameObject;
 
-  init() {
+  initialSettings?: Settings;
+
+  constructor(settings?: Settings) {
+    this.initialSettings = settings;
+  }
+
+  init(settings: Settings) {
   }
 
   update(dt: number) {
@@ -24,7 +30,7 @@ abstract class Component {
     return this.gameObject.game;
   }
 
-  getComponent<T extends Component>(componentType: {new(...args: any[]): T}): T {
+  getComponent<T extends Component<any>>(componentType: {new(...args: any[]): T}): T {
     return this.gameObject.getComponent(componentType);
   }
 

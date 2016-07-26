@@ -15,8 +15,6 @@ I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.
   * Singleton example in Unity: https://unity3d.com/learn/tutorials/projects/2d-roguelike-tutorial/writing-game-manager
   * Useful SA discussion on Unity singletons starts here: http://forums.somethingawful.com/showthread.php?threadid=2692947&userid=0&perpage=40&pagenumber=444#post462272736
   * Make `game` object a `GameObject`: `this.obj.game.getComponent(GameManager)`
-* [x] How should we look up components?
-  * Components part of the current object: `self.getComponent(Type)`
 * [ ] How should we look up objects?
   * Unity: http://docs.unity3d.com/Manual/ControllingGameObjectsComponents.html
   * Linking directly with setters, like `enemy.setPlayer(player)`
@@ -29,8 +27,10 @@ I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.
 * [ ] Figure out additional hooks for components
   * For example, collision needs to be broken up into "detection" and "resolution" phases, so that e.g. an enemy that turns around when it hits a block can be coded as two separate components
   * `FixedUpdate`-like hook? Does this even make sense in a single-threaded application? Seems suuuper difficult to time and schedule correctly.
-* [ ] Should probably deprecate `constructor()` hooks on components in favor of doing all initialization in `init()`. That way constructing a component is "pure" in that it never kicks off any process.
-  * [ ] Will need to make it possible to pass arguments to `init` somehow - maybe store any args passed to constructor, and pass them to init when called? Imagine this is super hard to type-check tho.
+* [x] How should we look up components?
+  * Components part of the current object: `self.getComponent(Type)`
+* [x] Should probably deprecate `constructor()` hooks on components in favor of doing all initialization in `init()`. That way constructing a component is "pure" in that it never kicks off any process.
+  * [x] Will need to make it possible to pass arguments to `init` somehow - maybe store any args passed to constructor, and pass them to init when called? Imagine this is super hard to type-check tho.
 
 ## Shim Todo
 

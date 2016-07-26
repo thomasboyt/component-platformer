@@ -20,7 +20,7 @@ type AssetCfg = {
   audio: StringMap;
 }
 
-export default class AssetManager extends Component {
+export default class AssetManager extends Component<AssetCfg> {
   private assets: AssetMap;
   numTotal: number;
   numLoaded: number = 0;
@@ -28,8 +28,7 @@ export default class AssetManager extends Component {
 
   _assetCfg: AssetCfg;
 
-  constructor(assetCfg: AssetCfg) {
-    super();
+  init(assetCfg: AssetCfg) {
     this.assets = {
       'images': {},
       'audio': {},
@@ -41,9 +40,7 @@ export default class AssetManager extends Component {
       Object.keys(this._assetCfg.images).length +
       Object.keys(this._assetCfg.audio).length
     );
-  }
 
-  init() {
     const audioCtx = this.getComponent(AudioManager).ctx;
     this.audioCtx = audioCtx;
   }

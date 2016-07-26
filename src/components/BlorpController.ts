@@ -7,7 +7,7 @@ import GameManager from './GameManager';
 
 import * as Tags from '../Tags';
 
-export default class BlorpController extends Component {
+export default class BlorpController extends Component<{}> {
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 2 / 10;
   walkingRight: boolean = true;

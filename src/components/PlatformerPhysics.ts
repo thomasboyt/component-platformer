@@ -27,7 +27,7 @@ class Delegate<T> {
   }
 }
 
-export default class PlatformerPhysics extends Component {
+export default class PlatformerPhysics extends Component<{}> {
   grounded: boolean = false;
 
   afterBlockCollision: Delegate<Intersection> = new Delegate<Intersection>();
@@ -83,12 +83,6 @@ export default class PlatformerPhysics extends Component {
       }
 
       this.afterBlockCollision.call(intersect);
-      // for (let component of this.getComponents()) {
-      //   if (component.afterBlockCollision) {
-      //     component.afterBlockCollision(other, intersect);
-      //   }
-      // }
-      // this.sendMessage('afterBlockCollision', other, intersect);
     }
   }
 }

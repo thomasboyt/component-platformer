@@ -7,7 +7,7 @@ export interface PhysicalSettings {
   size?: Pearl.Coordinates;
 }
 
-export default class Physical extends Component {
+export default class Physical extends Component<PhysicalSettings> {
   center: Pearl.Coordinates;
   size: Pearl.Coordinates;
   angle: number;
@@ -19,9 +19,7 @@ export default class Physical extends Component {
     y: 0,
   };
 
-  constructor(settings: PhysicalSettings = {}) {
-    super();
-
+  init(settings: PhysicalSettings = {}) {
     if (settings.center) {
       this.center = settings.center;
     }

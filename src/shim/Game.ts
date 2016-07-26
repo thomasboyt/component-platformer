@@ -5,9 +5,9 @@ import GameObject from './GameObject';
 
 export default class Game extends Pearl.Game {
   obj: GameObject;
-  private rootComponents: Component[]
+  private rootComponents: Component<any>[]
 
-  constructor(rootComponents: Component[]) {
+  constructor(rootComponents: Component<any>[]) {
     super();
     this.rootComponents = rootComponents;
   }

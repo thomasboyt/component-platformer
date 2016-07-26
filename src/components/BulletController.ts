@@ -5,20 +5,10 @@ interface Opts {
   creator: GameObject,
 }
 
-export default class BulletController extends Component {
+export default class BulletController extends Component<Opts> {
   bulletSpeed: number = 1 / 10;
 
-  // TODO: Hey, so this is a super shitty pattern...
-  // Could the arguments passed to constructor() always get passed to init() too?
-  private opts: Opts;
-  constructor(opts: Opts) {
-    super();
-    this.opts = opts;
-  }
-
-  init() {
-    const opts = this.opts;
-
+  init(opts: Opts) {
     const phys = this.getComponent(Physical);
 
     phys.size = {
