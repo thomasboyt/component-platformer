@@ -59,7 +59,9 @@ export default class WorldManager extends Component<{}> {
           }
         }),
         // add controls to allow player to move left/right and jump
-        new PlayerController(),
+        new PlayerController({
+          world: this.gameObject,
+        }),
 
         // add platformer physics to apply gravity and collision with platforms
         new PlatformerPhysics(),

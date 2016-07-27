@@ -13,12 +13,21 @@ enum PlayerState {
   dead,
 }
 
-export default class PlayerController extends Component<{}> {
+interface Options {
+  world: GameObject;
+}
+
+export default class PlayerController extends Component<Options> {
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 3 / 10;
   facingLeft: boolean = true;
-
   state: PlayerState = PlayerState.alive;
+
+  world: GameObject;
+
+  init(opts: Options) {
+    this.world = opts.world;
+  }
 
   update(dt: number) {
     if (this.state === PlayerState.dead) {
@@ -53,6 +62,11 @@ export default class PlayerController extends Component<{}> {
     if (this.pearl.inputter.isKeyPressed(Pearl.Keys.shift)) {
       this.shoot();
     }
+
+    if (physical.center.y > this.world.getComponent(WorldManager).height + physical.size.y / 2) {
+      this.state = PlayerState.dead;
+      this.pearl.obj.getComponent(GameManager).playerDied();
+    }
   }
 
   private shoot() {
@@ -83,7 +97,10 @@ export default class PlayerController extends Component<{}> {
 
       this.pearl.async.schedule(function* (this: PlayerController) {
         this.state = PlayerState.dead;
+        this.getComponent(Physical).frozen = true;
+
         yield this.pearl.async.waitMs(3000);
+
         this.pearl.obj.getComponent(GameManager).playerDied();
       }.bind(this));
     }

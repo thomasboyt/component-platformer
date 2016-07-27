@@ -66,8 +66,8 @@ One simple single-screen level should suffice. The player's goal is to collect s
   * [x] Player should die when hitting an enemy
     * Use object tags to define what an "enemy" is
     * This is half-implemented but the player still persists in the object graph...
-  * [ ] Player should die when falling off the world
-    * Should also make sure to destroy enemies if they fall off the world
+  * [x] Player should die when falling off the world
+    * [x] Should also make sure to destroy enemies if they fall off the world
   * [ ] Game states
     * [x] Title Screen
     * [x] Game in progress

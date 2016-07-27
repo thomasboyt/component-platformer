@@ -13,6 +13,8 @@ export default class Physical extends Component<PhysicalSettings> {
   angle: number;
   boundingBox: Pearl.BoundingBox = Pearl.BoundingBox.Rectangle;
 
+  frozen: boolean = false;
+
   // TODO: This maybe belongs somewhere else? Especially if it's going to be this generic?
   vel: Pearl.Coordinates = {
     x: 0,
@@ -29,7 +31,9 @@ export default class Physical extends Component<PhysicalSettings> {
   }
 
   update(dt: number) {
-    this.center.x += this.vel.x * dt;
-    this.center.y += this.vel.y * dt;
+    if (!this.frozen) {
+      this.center.x += this.vel.x * dt;
+      this.center.y += this.vel.y * dt;
+    }
   }
 }
