@@ -39,7 +39,7 @@ export default class BlorpController extends Component<Options> {
         phys.center.x - phys.size.x / 2 < 0 ||
         phys.center.y - phys.size.y / 2 < 0) {
       // offscreen, destroy this!
-      this.game.entities.destroy(this.gameObject);
+      this.pearl.entities.destroy(this.gameObject);
     }
 
     const platformerPhysics = this.getComponent(PlatformerPhysics);
@@ -69,8 +69,8 @@ export default class BlorpController extends Component<Options> {
 
   collision(other: GameObject) {
     if (other.hasTag(Tags.bullet)) {
-      this.game.entities.destroy(this.gameObject);
-      this.game.entities.destroy(other);
+      this.pearl.entities.destroy(this.gameObject);
+      this.pearl.entities.destroy(other);
     }
   }
 

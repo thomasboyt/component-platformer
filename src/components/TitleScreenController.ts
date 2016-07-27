@@ -13,7 +13,7 @@ export default class TitleScreenController extends Component<Options> {
   }
 
   update(dt: number) {
-    if (this.game.inputter.isKeyPressed(Pearl.Keys.space)) {
+    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space)) {
       this.handleAdvanceTitle();
     }
   }

@@ -13,7 +13,7 @@ export default class GameOverController extends Component<Options> {
   }
 
   update(dt: number) {
-    if (this.game.inputter.isKeyPressed(Pearl.Keys.r)) {
+    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.r)) {
       this.handleRestart();
     }
   }

@@ -65,7 +65,7 @@ export default class WorldManager extends Component<{}> {
         new PlatformerPhysics(),
 
         new AnimationManager({
-          sheet: this.game.obj.getComponent(GameManager).playerSheet,
+          sheet: this.pearl.obj.getComponent(GameManager).playerSheet,
 
           initialState: 'stand',
 
@@ -142,7 +142,7 @@ export default class WorldManager extends Component<{}> {
         new PlatformerPhysics(),
 
         new AnimationManager({
-          sheet: this.game.obj.getComponent(GameManager).blorpSheet,
+          sheet: this.pearl.obj.getComponent(GameManager).blorpSheet,
           initialState: 'stand',
           animations: {
             stand: {
@@ -162,7 +162,7 @@ export default class WorldManager extends Component<{}> {
   restart() {
     for (let child of this.gameObject.children) {
       // blow up the scene, start fresh!
-      this.game.entities.destroy(child);
+      this.pearl.entities.destroy(child);
     }
 
     this.createWorld();

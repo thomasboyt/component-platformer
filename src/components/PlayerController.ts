@@ -29,13 +29,13 @@ export default class PlayerController extends Component<{}> {
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
-    if (this.game.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
+    if (this.pearl.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
       physical.vel.x = -this.walkSpeed;
       anim.set('walk');
       this.facingLeft = false;
       anim.setScale(-1, 1);
 
-    } else if (this.game.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
+    } else if (this.pearl.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
       physical.vel.x = this.walkSpeed;
       anim.set('walk');
       this.facingLeft = true;
@@ -46,11 +46,11 @@ export default class PlayerController extends Component<{}> {
       anim.set('stand');
     }
 
-    if (this.game.inputter.isKeyPressed(Pearl.Keys.space) && platformerPhysics.grounded) {
+    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space) && platformerPhysics.grounded) {
       physical.vel.y = -this.jumpSpeed;
     }
 
-    if (this.game.inputter.isKeyPressed(Pearl.Keys.shift)) {
+    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.shift)) {
       this.shoot();
     }
   }
@@ -81,10 +81,10 @@ export default class PlayerController extends Component<{}> {
     if (other.hasTag(Tags.enemy)) {
       this.getComponent(AnimationManager).set('dead');
 
-      this.game.async.schedule(function* (this: PlayerController) {
+      this.pearl.async.schedule(function* (this: PlayerController) {
         this.state = PlayerState.dead;
-        yield this.game.async.waitMs(3000);
-        this.game.obj.getComponent(GameManager).playerDied();
+        yield this.pearl.async.waitMs(3000);
+        this.pearl.obj.getComponent(GameManager).playerDied();
       }.bind(this));
     }
   }

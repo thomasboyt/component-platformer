@@ -54,7 +54,7 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.game.entities.add(this.title, null);
+    this.pearl.entities.add(this.title, null);
   }
 
   startGame() {
@@ -68,17 +68,17 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.game.entities.add(this.world, null);
+    this.pearl.entities.add(this.world, null);
   }
 
   handleAdvanceTitle() {
-    this.game.entities.destroy(this.title!);
+    this.pearl.entities.destroy(this.title!);
     this.title = null;
     this.startGame();
   }
 
   enterGameOver() {
-    this.game.entities.destroy(this.world!);
+    this.pearl.entities.destroy(this.world!);
     this.world = null;
 
     this.gameOverScreen = new GameObject({
@@ -93,11 +93,11 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.game.entities.add(this.gameOverScreen, null);
+    this.pearl.entities.add(this.gameOverScreen, null);
   }
 
   handleRestartGame() {
-    this.game.entities.destroy(this.gameOverScreen!);
+    this.pearl.entities.destroy(this.gameOverScreen!);
     this.gameOverScreen = null;
 
     this.startGame();

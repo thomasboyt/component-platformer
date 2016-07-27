@@ -39,7 +39,7 @@ export default class PlatformerPhysics extends Component<{}> {
       this.grounded = false;
     }
 
-    physical.vel.y += this.game.obj.getComponent(GameManager).gravityAccel * dt;
+    physical.vel.y += this.pearl.obj.getComponent(GameManager).gravityAccel * dt;
   }
 
   collision(other: GameObject) {

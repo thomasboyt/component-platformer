@@ -31,7 +31,7 @@ abstract class Component<Settings> {
    * Convenience stuff that maps back to gameObject
    */
 
-  get game(): Game {
+  get pearl(): Game {
     return this.gameObject.game;
   }
 
