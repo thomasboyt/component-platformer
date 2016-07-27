@@ -18,9 +18,17 @@ import * as Tags from '../Tags';
 
 export default class WorldManager extends Component<{}> {
   // Object references
-  player: GameObject;
+  player: GameObject | null;
+
+  // TODO: maybe... don't... manually manage this...
+  enemies: GameObject[] = [];
+  platforms: GameObject[] = [];
 
   init() {
+    this.createWorld();
+  }
+
+  createWorld() {
     // 400 x 400
     this.createPlatform(0, 0, 20, 400);
     this.createPlatform(380, 0, 20, 400);
@@ -58,7 +66,9 @@ export default class WorldManager extends Component<{}> {
 
         new AnimationManager({
           sheet: this.game.obj.getComponent(GameManager).playerSheet,
+
           initialState: 'stand',
+
           animations: {
             stand: {
               frames: [0],
@@ -67,6 +77,10 @@ export default class WorldManager extends Component<{}> {
             walk: {
               frames: [1, 0],
               frameLengthMs: 200,
+            },
+            dead: {
+              frames: [2],
+              frameLengthMs: null,
             }
           },
         })
@@ -107,6 +121,7 @@ export default class WorldManager extends Component<{}> {
       ],
     });
 
+    this.platforms.push(platform);
     this.game.entities.add(platform, null);
   }
 
@@ -151,6 +166,25 @@ export default class WorldManager extends Component<{}> {
       ],
     });
 
+    this.enemies.push(blorp);
     this.game.entities.add(blorp, null);
+  }
+
+  destroyWorld() {
+    const entities = [
+      ...this.enemies,
+      ...this.platforms,
+      this.player!
+    ];
+
+    for (let entity of entities) {
+      this.game.entities.destroy(entity);
+      this.player = null;
+    }
+  }
+
+  restart() {
+    this.destroyWorld();
+    this.createWorld();
   }
 }

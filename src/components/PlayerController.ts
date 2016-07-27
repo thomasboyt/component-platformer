@@ -3,14 +3,28 @@ import {Component, GameObject, Physical, AnimationManager} from '../shim';
 
 import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
+import GameManager from './GameManager';
+import WorldManager from './WorldManager';
+
 import * as Tags from '../Tags';
+
+enum PlayerState {
+  alive,
+  dead,
+}
 
 export default class PlayerController extends Component<{}> {
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 3 / 10;
   facingLeft: boolean = true;
 
+  state: PlayerState = PlayerState.alive;
+
   update(dt: number) {
+    if (this.state === PlayerState.dead) {
+      return;
+    }
+
     const physical = this.getComponent(Physical);
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
@@ -62,8 +76,18 @@ export default class PlayerController extends Component<{}> {
   }
 
   collision(other: GameObject) {
+    if (this.state === PlayerState.dead) {
+      return;
+    }
+
     if (other.hasTag(Tags.enemy)) {
-      this.game.entities.destroy(this.gameObject);
+      this.getComponent(AnimationManager).set('dead');
+
+      this.game.async.schedule(function* (this: PlayerController) {
+        this.state = PlayerState.dead;
+        yield this.game.async.waitMs(3000);
+        this.game.obj.getComponent(GameManager).playerDied();
+      }.bind(this));
     }
   }
 }

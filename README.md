@@ -28,6 +28,9 @@ I'm reimplementing a platformer I made about a year ago, [Blorp](https://github.
   * By tag: http://docs.unity3d.com/ScriptReference/GameObject.FindGameObjectsWithTag.html
   * Unity has the concept of a "component tree" that's based around the `Transform` component, so you can e.g. look up "child objects"
   * **Currently**: Objects are passed through as arguments, which works as long as you're very careful about not leaving around extra references to destroyed objects! Probably should just codify this as a tree...
+    * [ ] Bullets don't get destroyed when player is destroyed...
+    * [ ] WorldManager has to manually manage player/platform/enemy references
+    * [ ] GameManager has to manage title, world, gameOver references
 * [ ] Begin figuring out what dev tooling around components looks like: how are components visualized?
 * [ ] Currently, there are order-dependent update chains. Is this okay? Should this be codified?
   * For example: `PlayerController` has to be applied *before* `PlatformerPhysics`, or things feel really laggy since they're not applied for a whole frame.
@@ -60,16 +63,15 @@ One simple single-screen level should suffice. The player's goal is to collect s
     * [x] Blorp should get sploded when it's hit by a bullet
 * [ ] Add pickups (coins?)
 * [ ] Implement game rules
-  * [ ] Player should die when hitting an enemy
+  * [x] Player should die when hitting an enemy
     * Use object tags to define what an "enemy" is
     * This is half-implemented but the player still persists in the object graph...
   * [ ] Player should die when falling off the world
     * Should also make sure to destroy enemies if they fall off the world
   * [ ] Game states
-    * [ ] Title Screen
-    * [ ] Get ready...
-    * [ ] Game in progress
-    * [ ] Game over/dead
+    * [x] Title Screen
+    * [x] Game in progress
+    * [x] Game over/dead
     * [ ] Completed level
 * [ ] Add sounds
   * [ ] Pew pew lasergun!

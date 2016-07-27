@@ -32,17 +32,15 @@ export default class BlorpController extends Component<Options> {
 
     let walkDirection = this.walkingRight ? 1 : -1;
 
-    const player = this.world.getComponent(WorldManager).player;
+    const player = this.world.getComponent(WorldManager).player!;
     const playerCenter = player.getComponent(Physical).center;
 
-    if (player) {
-      const xDiff = playerCenter.x - phys.center.x;
-      const yDiff = playerCenter.y - phys.center.y;
+    const xDiff = playerCenter.x - phys.center.x;
+    const yDiff = playerCenter.y - phys.center.y;
 
-      if (Math.abs(xDiff) < 60 && Math.abs(yDiff) < 25) {
-        walkDirection = xDiff > 0 ? 1 : -1;
-        anim.setScale(walkDirection, 1);
-      }
+    if (Math.abs(xDiff) < 60 && Math.abs(yDiff) < 25) {
+      walkDirection = xDiff > 0 ? 1 : -1;
+      anim.setScale(walkDirection, 1);
     }
 
     phys.vel.x = walkDirection * this.walkSpeed;
