@@ -111,4 +111,10 @@ export default class GameObject extends Pearl.Entity<null> {
       component.render(ctx);
     }
   }
+
+  onDestroy() {
+    for (let component of this.components) {
+      component.onDestroy();
+    }
+  }
 }

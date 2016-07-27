@@ -22,11 +22,26 @@ export default class BlorpController extends Component<Options> {
     this.world = opts.world;
 
     const plat = this.getComponent(PlatformerPhysics);
-    plat.afterBlockCollision.add((data) => this.afterBlockCollision(data));
+    plat.afterBlockCollision.add(this.afterBlockCollision);
+  }
+
+  onDestroy() {
+    const plat = this.getComponent(PlatformerPhysics);
+    plat.afterBlockCollision.remove(this.afterBlockCollision);
   }
 
   update(dt: number) {
     const phys = this.getComponent(Physical);
+    const world = this.world.getComponent(WorldManager);
+
+    if (phys.center.x > world.width + phys.size.x / 2 ||
+        phys.center.y > world.height + phys.size.y / 2 ||
+        phys.center.x - phys.size.x / 2 < 0 ||
+        phys.center.y - phys.size.y / 2 < 0) {
+      // offscreen, destroy this!
+      this.game.entities.destroy(this.gameObject);
+    }
+
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
@@ -59,7 +74,7 @@ export default class BlorpController extends Component<Options> {
     }
   }
 
-  afterBlockCollision(intersect: Intersection) {
+  afterBlockCollision = (intersect: Intersection) => {
     if (intersect.h > intersect.w) {
       if (intersect.fromLeft) {
         this.walkingRight = false;

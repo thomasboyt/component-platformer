@@ -10,6 +10,8 @@ abstract class Component<Settings> {
     this.initialSettings = settings;
   }
 
+  // public hooks
+
   init(settings: Settings) {
   }
 
@@ -20,6 +22,9 @@ abstract class Component<Settings> {
   }
 
   render(ctx: CanvasRenderingContext2D) {
+  }
+
+  onDestroy() {
   }
 
   /*

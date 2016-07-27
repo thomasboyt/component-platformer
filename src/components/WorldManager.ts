@@ -17,6 +17,10 @@ import PlatformRenderer from './render/PlatformRenderer';
 import * as Tags from '../Tags';
 
 export default class WorldManager extends Component<{}> {
+  // World settings
+  width: number = 400;
+  height: number = 400;
+
   // Object references
   player: GameObject | null;
 
