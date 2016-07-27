@@ -68,12 +68,57 @@ export default class GameObject extends Pearl.Entity<null> {
     return c;
   }
 
-  sendMessage(name: string, ...args: any[]) {
-    for (let component of this.components) {
-      if (typeof component[name] === 'function') {
-        component[name](...args);
-      }
-    }
+  // This is a re-implementation of Unity's sendMessage() kept around for posterity's sake, but
+  // if you look up "unity sendMessage" like 8 the first 10 results are saying "don't use this trash
+  // API," so I think I'm going to avoid ever uncommenting it.
+  //
+  // sendMessage(name: string, ...args: any[]) {
+  //   for (let component of this.components) {
+  //     if (typeof component[name] === 'function') {
+  //       component[name](...args);
+  //     }
+  //   }
+  // }
+
+  /* Object tree system */
+
+  private _parent: GameObject | null = null;  // top-level game object doesn't have a parent
+  private _children: Set<GameObject> = new Set();
+
+  /**
+   * This GameObject's child GameObjects.
+   *
+   * This Set should not be mutated (use `addChild` instead)!
+   */
+  get children(): Set<GameObject> {
+    return this._children;
+  }
+
+  /**
+   * This GameObject's parent GameObject, or null if it is a top-level object.
+   */
+  get parent(): GameObject | null {
+    return this.parent;
+  }
+
+  private setParent(parent: GameObject) {
+    this._parent = parent;
+  }
+
+  /**
+   * Instantiates a passed GameObject and adds it as a child object to this GameObject.
+   *
+   * Returns the GameObject for convenience.
+   */
+  addChild(child: GameObject): GameObject {
+    child.setParent(this);
+    this._children.add(child);
+    this.game.entities.add(child, null);
+    return child;
+  }
+
+  private removeChild(child: GameObject) {
+    this._children.delete(child);
   }
 
   /* Pearl.Entity compatibility */
@@ -116,5 +161,18 @@ export default class GameObject extends Pearl.Entity<null> {
     for (let component of this.components) {
       component.onDestroy();
     }
+
+    // remove relation to parent
+    if (this._parent) {
+      this._parent.removeChild(this);
+    }
+
+    // remove all child objects
+    for (let child of this._children) {
+      this.game.entities.destroy(child);
+    }
+
+    // remove reference to allow GC
+    this._children = new Set();
   }
 }

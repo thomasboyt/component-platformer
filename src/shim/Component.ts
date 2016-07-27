@@ -38,10 +38,6 @@ abstract class Component<Settings> {
   getComponent<T extends Component<any>>(componentType: {new(...args: any[]): T}): T {
     return this.gameObject.getComponent(componentType);
   }
-
-  sendMessage(name: string, ...args: any[]) {
-    this.gameObject.sendMessage(name, ...args);
-  }
 }
 
 export default Component;

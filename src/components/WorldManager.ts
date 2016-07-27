@@ -24,10 +24,6 @@ export default class WorldManager extends Component<{}> {
   // Object references
   player: GameObject | null;
 
-  // TODO: maybe... don't... manually manage this...
-  enemies: GameObject[] = [];
-  platforms: GameObject[] = [];
-
   init() {
     this.createWorld();
   }
@@ -46,7 +42,7 @@ export default class WorldManager extends Component<{}> {
 
     this.createBlorp(200, 70);
 
-    this.player = new GameObject({
+    this.player = this.gameObject.addChild(new GameObject({
       // name is used for debug display and maybe lookups in the future?
       name: 'Player',
 
@@ -92,19 +88,14 @@ export default class WorldManager extends Component<{}> {
 
       // might be useful to be able to specify zIndex here, too?
       // zIndex: 0,
-    });
-
-
-    // TODO: Abstract this away somewhere!!
-    // createGameObject() factory?
-    this.game.entities.add(this.player, null);
+    }));
   }
 
   private createPlatform(x: number, y: number, width: number, height: number) {
     const cx = x + width / 2;
     const cy = y + height / 2;
 
-    const platform = new GameObject({
+    this.gameObject.addChild(new GameObject({
       name: 'Platform',
 
       tags: [Tags.block],
@@ -123,14 +114,11 @@ export default class WorldManager extends Component<{}> {
 
         new PlatformRenderer(),
       ],
-    });
-
-    this.platforms.push(platform);
-    this.game.entities.add(platform, null);
+    }));
   }
 
   private createBlorp(x: number, y: number) {
-    const blorp = new GameObject({
+    this.gameObject.addChild(new GameObject({
       name: 'Blorp',
 
       tags: [Tags.enemy],
@@ -168,27 +156,15 @@ export default class WorldManager extends Component<{}> {
           },
         }),
       ],
-    });
-
-    this.enemies.push(blorp);
-    this.game.entities.add(blorp, null);
-  }
-
-  destroyWorld() {
-    const entities = [
-      ...this.enemies,
-      ...this.platforms,
-      this.player!
-    ];
-
-    for (let entity of entities) {
-      this.game.entities.destroy(entity);
-      this.player = null;
-    }
+    }));
   }
 
   restart() {
-    this.destroyWorld();
+    for (let child of this.gameObject.children) {
+      // blow up the scene, start fresh!
+      this.game.entities.destroy(child);
+    }
+
     this.createWorld();
   }
 }

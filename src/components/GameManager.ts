@@ -78,7 +78,6 @@ export default class GameManager extends Component<{}> {
   }
 
   enterGameOver() {
-    this.world!.getComponent(WorldManager).destroyWorld();
     this.game.entities.destroy(this.world!);
     this.world = null;
 

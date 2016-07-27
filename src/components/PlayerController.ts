@@ -56,7 +56,7 @@ export default class PlayerController extends Component<{}> {
   }
 
   private shoot() {
-    const bullet = new GameObject({
+    this.gameObject.addChild(new GameObject({
       name: 'Bullet',
 
       tags: [Tags.bullet],
@@ -70,9 +70,7 @@ export default class PlayerController extends Component<{}> {
           direction: this.facingLeft ? 'left' : 'right',
         }),
       ],
-    });
-
-    this.game.entities.add(bullet, null);
+    }));
   }
 
   collision(other: GameObject) {
