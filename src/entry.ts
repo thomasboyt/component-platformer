@@ -3,6 +3,7 @@ import GameManager from './components/GameManager';
 import assets from './assets';
 
 import {createGame, AssetManager, AudioManager} from './shim';
+import {palette} from './constants';
 
 createGame({
   rootComponents: [
@@ -16,5 +17,5 @@ createGame({
   canvas: document.getElementById('canvas') as HTMLCanvasElement,
   width: 400,
   height: 400,
-  backgroundColor: 'black',
+  backgroundColor: palette.darker,
 });

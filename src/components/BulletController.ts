@@ -1,4 +1,5 @@
 import {Component, GameObject, Physical} from '../shim';
+import {palette} from '../constants';
 
 interface Opts {
   direction: 'left' | 'right' | 'up' | 'down',
@@ -46,10 +47,10 @@ export default class BulletController extends Component<Opts> {
   update(dt: number) {
     // TODO: Detect if bullet goes off screen and destroy if so
   }
-  
+
   render(ctx: CanvasRenderingContext2D) {
     const phys = this.getComponent(Physical);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = palette.lighter;
 
     ctx.fillRect(
       phys.center.x - phys.size.x / 2,

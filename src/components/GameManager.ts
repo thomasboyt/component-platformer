@@ -16,9 +16,6 @@ export default class GameManager extends Component<{}> {
   // Game settings
   gravityAccel: number = (5 / 10000);
 
-  // Game state
-  lives: number;
-
   // Object references
   title: GameObject | null = null;
   world: GameObject | null = null;
@@ -58,8 +55,6 @@ export default class GameManager extends Component<{}> {
   }
 
   startGame() {
-    this.lives = 3;
-
     this.world = new GameObject({
       name: 'World',
 
@@ -104,12 +99,6 @@ export default class GameManager extends Component<{}> {
   }
 
   playerDied() {
-    this.lives -= 1;
-
-    if (this.lives === 0) {
-      this.enterGameOver();
-    } else {
-      this.world!.getComponent(WorldManager).restart();
-    }
+    this.enterGameOver();
   }
 }

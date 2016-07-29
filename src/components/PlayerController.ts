@@ -23,6 +23,8 @@ export default class PlayerController extends Component<Options> {
   facingLeft: boolean = true;
   state: PlayerState = PlayerState.alive;
 
+  didDoubleJump: boolean = false;
+
   world: GameObject;
 
   init(opts: Options) {
@@ -55,8 +57,20 @@ export default class PlayerController extends Component<Options> {
       anim.set('stand');
     }
 
-    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space) && platformerPhysics.grounded) {
-      physical.vel.y = -this.jumpSpeed;
+    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space)) {
+      let allowJump: boolean = false;
+
+      if (platformerPhysics.grounded) {
+        this.didDoubleJump = false;
+        allowJump = true;
+      } else if (!this.didDoubleJump) {
+        this.didDoubleJump = true;
+        allowJump = true;
+      }
+
+      if (allowJump) {
+        physical.vel.y = -this.jumpSpeed;
+      }
     }
 
     if (this.pearl.inputter.isKeyPressed(Pearl.Keys.shift)) {

@@ -9,10 +9,12 @@ import * as Tags from '../Tags';
 
 interface Options {
   world: GameObject;
+  patrolBounds: [number, number]
 }
 
 export default class BlorpController extends Component<Options> {
   private world: GameObject;
+  patrolBounds: [number, number]
 
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 2 / 10;
@@ -20,6 +22,7 @@ export default class BlorpController extends Component<Options> {
 
   init(opts: Options) {
     this.world = opts.world;
+    this.patrolBounds = opts.patrolBounds;
 
     const plat = this.getComponent(PlatformerPhysics);
     plat.afterBlockCollision.add(this.afterBlockCollision);
@@ -34,30 +37,38 @@ export default class BlorpController extends Component<Options> {
     const phys = this.getComponent(Physical);
     const world = this.world.getComponent(WorldManager);
 
-    if (phys.center.x > world.width + phys.size.x / 2 ||
-        phys.center.y > world.height + phys.size.y / 2 ||
-        phys.center.x - phys.size.x / 2 < 0 ||
-        phys.center.y - phys.size.y / 2 < 0) {
-      // offscreen, destroy this!
-      this.pearl.entities.destroy(this.gameObject);
-    }
+    // if (phys.center.x > world.width + phys.size.x / 2 ||
+    //     phys.center.y > world.height + phys.size.y / 2 ||
+    //     phys.center.x - phys.size.x / 2 < 0 ||
+    //     phys.center.y - phys.size.y / 2 < 0) {
+    //   // offscreen, destroy this!
+    //   this.pearl.entities.destroy(this.gameObject);
+    // }
 
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
-    let walkDirection = this.walkingRight ? 1 : -1;
-
+    // follow player if they're on the same general y range and within the patrol boundaries
     const player = this.world.getComponent(WorldManager).player!;
     const playerCenter = player.getComponent(Physical).center;
 
     const xDiff = playerCenter.x - phys.center.x;
     const yDiff = playerCenter.y - phys.center.y;
 
-    if (Math.abs(xDiff) < 60 && Math.abs(yDiff) < 25) {
-      walkDirection = xDiff > 0 ? 1 : -1;
-      anim.setScale(walkDirection, 1);
+    if (playerCenter.x >= this.patrolBounds[0] &&
+        playerCenter.y <= this.patrolBounds[1] &&
+        Math.abs(yDiff) < 20) {
+      this.walkingRight = xDiff > 0;
+
+    } else {
+      if (phys.center.x > this.patrolBounds[1]) {
+        this.walkingRight = false;
+      } else if (phys.center.x < this.patrolBounds[0]) {
+        this.walkingRight = true;
+      }
     }
 
+    const walkDirection = this.walkingRight ? 1 : -1;
     phys.vel.x = walkDirection * this.walkSpeed;
 
     if (phys.vel.x && platformerPhysics.grounded) {
