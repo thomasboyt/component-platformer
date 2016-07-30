@@ -18,7 +18,7 @@ interface Options {
 }
 
 export default class PlayerController extends Component<Options> {
-  walkSpeed: number = 5 / 100;
+  walkSpeed: number = 10 / 100;
   jumpSpeed: number = 3 / 10;
   facingLeft: boolean = true;
   state: PlayerState = PlayerState.alive;
