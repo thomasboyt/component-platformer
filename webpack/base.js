@@ -1,3 +1,4 @@
+var path = require('path');
 var createVendorChunk = require('webpack-create-vendor-chunk');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -43,6 +44,10 @@ module.exports = {
     },
   },
 
+  resolveLoader: {
+    root: path.join(__dirname, '../node_modules'),
+  },
+
   module: {
     loaders: [
       {
@@ -52,8 +57,9 @@ module.exports = {
 
       {
         test: /\.js$/,
-        // exclude node_modules, plus modules I `npm link` in development
-        exclude: /(node_modules\/|pearl-component-shim\/|pearl\/)/,
+        // TODO: Some day we shouldn't compile pearl/pearl-component-shim here, it should be nice
+        // distributed ES5. Until then...
+        exclude: /node_modules\/(?!(pearl|pearl-component-shim))/,
         loader: 'babel-loader',
       },
 
