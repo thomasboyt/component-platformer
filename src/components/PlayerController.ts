@@ -40,13 +40,15 @@ export default class PlayerController extends Component<Options> {
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
-    if (this.pearl.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
+    if (this.pearl.inputter.isKeyDown(Pearl.Keys.leftArrow) ||
+        this.pearl.inputter.isKeyDown(Pearl.Keys.a)) {
       physical.vel.x = -this.walkSpeed;
       anim.set('walk');
       this.facingLeft = true;
       anim.setScale(-1, 1);
 
-    } else if (this.pearl.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
+    } else if (this.pearl.inputter.isKeyDown(Pearl.Keys.rightArrow) ||
+        this.pearl.inputter.isKeyDown(Pearl.Keys.d)) {
       physical.vel.x = this.walkSpeed;
       anim.set('walk');
       this.facingLeft = false;
