@@ -46,13 +46,7 @@ export default class WorldManager extends Component<{}> {
     this.scrollY += deltaScroll;
 
     for (let obj of this.gameObject.children) {
-      if (!obj.hasTag(Tags.staticBlock)) {
-        const objPhys = obj.getComponent(Physical);
-
-        if (objPhys) {
-          objPhys.center.y += deltaScroll;
-        }
-      }
+      this.scrollObj(obj, deltaScroll);
     }
 
     if (this.scrollY - this.lastSpawnY > 80) {
@@ -61,7 +55,33 @@ export default class WorldManager extends Component<{}> {
     }
   }
 
-  createWorld() {
+  restart() {
+    for (let child of this.gameObject.children) {
+      // blow up the scene, start fresh!
+      this.pearl.entities.destroy(child);
+    }
+
+    this.createWorld();
+  }
+
+  /**
+   * Move an object and all children down by deltaScroll pixels.
+   */
+  private scrollObj(obj: GameObject, deltaScroll: number) {
+    if (!obj.hasTag(Tags.staticBlock)) {
+      const objPhys = obj.getComponent(Physical);
+
+      if (objPhys) {
+        objPhys.center.y += deltaScroll;
+      }
+    }
+
+    for (let child of obj.children) {
+      this.scrollObj(child, deltaScroll);
+    }
+  }
+
+  private createWorld() {
     // 400 x 400 static walls on the edges that stay in place
     this.createPlatform(-20, 0, 20, 400, true);
     this.createPlatform(400, 0, 20, 400, true);
@@ -242,14 +262,5 @@ export default class WorldManager extends Component<{}> {
         }),
       ],
     }));
-  }
-
-  restart() {
-    for (let child of this.gameObject.children) {
-      // blow up the scene, start fresh!
-      this.pearl.entities.destroy(child);
-    }
-
-    this.createWorld();
   }
 }
