@@ -6,7 +6,7 @@ import {
   Physical,
   AnimationManager,
   SpriteSheet,
-} from '../shim';
+} from 'pearl-component-shim';
 
 import GameManager from './GameManager';
 import PlatformerPhysics from './PlatformerPhysics';

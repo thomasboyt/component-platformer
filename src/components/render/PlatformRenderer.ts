@@ -1,4 +1,4 @@
-import {Component, Physical} from '../../shim';
+import {Component, Physical} from 'pearl-component-shim';
 import {palette} from '../../constants';
 
 export default class PlatformRenderer extends Component<{}> {

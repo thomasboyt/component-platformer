@@ -1,5 +1,5 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject, Physical, AnimationManager} from '../shim';
+import {Component, GameObject, Physical, AnimationManager} from 'pearl-component-shim';
 
 import PlatformerPhysics from './PlatformerPhysics';
 import {Intersection} from '../util/math';

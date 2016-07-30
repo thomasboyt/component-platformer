@@ -1,5 +1,5 @@
 import * as Pearl from 'pearl';
-import {Component} from '../shim';
+import {Component} from 'pearl-component-shim';
 
 interface Options {
   onRestart: () => void;

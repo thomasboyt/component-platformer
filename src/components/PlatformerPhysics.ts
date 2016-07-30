@@ -1,5 +1,5 @@
 import * as Pearl from 'pearl';
-import {Component, GameObject, Physical} from '../shim';
+import {Component, GameObject, Physical} from 'pearl-component-shim';
 import GameManager from './GameManager';
 import {rectangleIntersection, Intersection} from '../util/math';
 

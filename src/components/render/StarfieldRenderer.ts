@@ -1,4 +1,4 @@
-import {Component} from '../../shim';
+import {Component} from 'pearl-component-shim';
 import {randInt} from '../../util/math';
 import {palette} from '../../constants';
 

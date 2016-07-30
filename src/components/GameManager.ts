@@ -5,7 +5,7 @@ import {
   Component,
   AssetManager,
   SpriteSheet,
-} from '../shim';
+} from 'pearl-component-shim';
 
 import WorldManager from './WorldManager';
 import TitleScreenController from './TitleScreenController';

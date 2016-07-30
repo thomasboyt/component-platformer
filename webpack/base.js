@@ -52,7 +52,8 @@ module.exports = {
 
       {
         test: /\.js$/,
-        exclude: /(node_modules\/)/,
+        // exclude node_modules, plus modules I `npm link` in development
+        exclude: /(node_modules\/|pearl-component-shim\/|pearl\/)/,
         loader: 'babel-loader',
       },
 
