@@ -43,13 +43,13 @@ export default class PlayerController extends Component<Options> {
     if (this.pearl.inputter.isKeyDown(Pearl.Keys.leftArrow)) {
       physical.vel.x = -this.walkSpeed;
       anim.set('walk');
-      this.facingLeft = false;
+      this.facingLeft = true;
       anim.setScale(-1, 1);
 
     } else if (this.pearl.inputter.isKeyDown(Pearl.Keys.rightArrow)) {
       physical.vel.x = this.walkSpeed;
       anim.set('walk');
-      this.facingLeft = true;
+      this.facingLeft = false;
       anim.setScale(1, 1);
 
     } else {

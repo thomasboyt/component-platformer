@@ -19,9 +19,9 @@ export default class BulletController extends Component<Opts> {
 
     let vec: [number, number];
     if (opts.direction === 'left') {
-      vec = [1, 0];
-    } else if (opts.direction === 'right') {
       vec = [-1, 0];
+    } else if (opts.direction === 'right') {
+      vec = [1, 0];
     } else if (opts.direction === 'up') {
       vec = [0, -1];
     } else if (opts.direction === 'down') {
