@@ -2,7 +2,6 @@
 
 The game itself should be a super-simplified version of Blorp, mainly to avoid implementing trickier platformer details and *especially* to avoid implementing a level editor.
 
-
 * [x] Add asset loader
 * [x] Add spritesheet, animations for player character
 * [x] Add bullet firing
@@ -30,10 +29,3 @@ The game itself should be a super-simplified version of Blorp, mainly to avoid i
 * [ ] Add sounds
   * [ ] Pew pew lasergun!
   * [ ] Jump noise
-
-## Resources
-
-* http://gameprogrammingpatterns.com/component.html
-* Unity's GameObject and Component classes
-  * http://docs.unity3d.com/Manual/GameObjects.html
-* https://unity3d.com/learn/tutorials/projects/mini-projects/creating-basic-platformer-game has some interesting platformer-specific samples
