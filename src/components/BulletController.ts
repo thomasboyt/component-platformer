@@ -1,6 +1,8 @@
 import {Component, GameObject, Physical, PolygonCollider} from 'pearl';
 import {palette} from '../constants';
 
+import * as Tags from '../Tags';
+
 interface Opts {
   direction: 'left' | 'right' | 'up' | 'down',
   creator: GameObject,
@@ -44,7 +46,37 @@ export default class BulletController extends Component<Opts> {
   }
 
   update(dt: number) {
-    // TODO: Raytrace bullet against all enemies in scene...
+    // Raytrace bullet against all enemies in scene, destroying enemies on collision
+    const phys = this.getComponent(Physical);
+
+    const enemies = [...this.pearl.entities.all()].filter((entity) => entity.hasTag(Tags.enemy));
+    const vec: [[number, number], [number, number]] = [
+      [phys.center.x, phys.center.y],
+      [phys.center.x + phys.vel.x, phys.center.y + phys.vel.y],
+    ];
+
+    for (let enemy of enemies) {
+      const poly = enemy.getComponent(PolygonCollider);
+
+      // TODO: This doesn't work, but I think I know why:
+      // The Blorp is fast enough that it "steps over" the bullet between frames
+      // E.g.
+      // on frame 1:
+      //   bullet ray is from 50 to 51
+      //   blorp is at 52
+      // on frame 2:
+      //   bullet ray is from 51 to 52
+      //   blorp is at 50
+      // not sure how you fix this other than taking into account the velocity of the other entity
+      // inside segmentIntersects?
+      //
+      // Of course, the other option would be to scrap raytacing and use a point-in-box test :)
+      if (poly.segmentIntersects(vec)) {
+        console.log('yeah');
+        this.pearl.entities.destroy(this.gameObject);
+        this.pearl.entities.destroy(enemy);
+      }
+    }
   }
 
   render(ctx: CanvasRenderingContext2D) {
