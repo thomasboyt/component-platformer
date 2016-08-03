@@ -34,8 +34,8 @@ export default class BulletController extends Component<Opts> {
     const parentPoly = opts.creator.getComponent(PolygonCollider);
     const parentPhys = opts.creator.getComponent(Physical);
 
-    const offsetX = parentPoly.width! / 2 + this.width! / 2;
-    const offsetY = parentPoly.height! / 2 + this.height! / 2;
+    const offsetX = (parentPoly.width!) / 2 + (this.width!) / 2;
+    const offsetY = (parentPoly.height!) / 2 + (this.height!) / 2;
 
     phys.center = {
       x: parentPhys.center.x + (vec[0] * offsetX),

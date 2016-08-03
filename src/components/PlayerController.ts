@@ -86,7 +86,7 @@ export default class PlayerController extends Component<Options> {
       this.shoot();
     }
 
-    if (physical.center.y > this.world.getComponent(WorldManager).height + poly.width! / 2) {
+    if (physical.center.y > this.world.getComponent(WorldManager).height + (poly.width!) / 2) {
       this.state = PlayerState.dead;
       this.pearl.obj.getComponent(GameManager).playerDied();
     }
