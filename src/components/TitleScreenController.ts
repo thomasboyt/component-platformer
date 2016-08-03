@@ -1,5 +1,4 @@
-import * as Pearl from 'pearl';
-import {Component} from 'pearl-component-shim';
+import {Component, Keys} from 'pearl';
 
 interface Options {
   onAdvance: () => void;
@@ -13,7 +12,7 @@ export default class TitleScreenController extends Component<Options> {
   }
 
   update(dt: number) {
-    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space)) {
+    if (this.pearl.inputter.isKeyPressed(Keys.space)) {
       this.handleAdvanceTitle();
     }
   }

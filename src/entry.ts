@@ -1,11 +1,10 @@
+import {createPearl, AssetManager, AudioManager} from 'pearl';
+
 import GameManager from './components/GameManager';
-
 import assets from './assets';
-
-import {createGame, AssetManager, AudioManager} from 'pearl-component-shim';
 import {palette} from './constants';
 
-createGame({
+createPearl({
   rootComponents: [
     new AssetManager(assets),
     new AudioManager({

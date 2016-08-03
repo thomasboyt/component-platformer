@@ -1,5 +1,4 @@
-import * as Pearl from 'pearl';
-import {Component, GameObject, Physical, AnimationManager} from 'pearl-component-shim';
+import {Component, GameObject, Physical, AnimationManager, Keys} from 'pearl';
 
 import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
@@ -40,15 +39,15 @@ export default class PlayerController extends Component<Options> {
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
-    if (this.pearl.inputter.isKeyDown(Pearl.Keys.leftArrow) ||
-        this.pearl.inputter.isKeyDown(Pearl.Keys.a)) {
+    if (this.pearl.inputter.isKeyDown(Keys.leftArrow) ||
+        this.pearl.inputter.isKeyDown(Keys.a)) {
       physical.vel.x = -this.walkSpeed;
       anim.set('walk');
       this.facingLeft = true;
       anim.setScale(-1, 1);
 
-    } else if (this.pearl.inputter.isKeyDown(Pearl.Keys.rightArrow) ||
-        this.pearl.inputter.isKeyDown(Pearl.Keys.d)) {
+    } else if (this.pearl.inputter.isKeyDown(Keys.rightArrow) ||
+        this.pearl.inputter.isKeyDown(Keys.d)) {
       physical.vel.x = this.walkSpeed;
       anim.set('walk');
       this.facingLeft = false;
@@ -59,7 +58,7 @@ export default class PlayerController extends Component<Options> {
       anim.set('stand');
     }
 
-    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.space)) {
+    if (this.pearl.inputter.isKeyPressed(Keys.space)) {
       let allowJump: boolean = false;
 
       if (platformerPhysics.grounded) {
@@ -75,7 +74,7 @@ export default class PlayerController extends Component<Options> {
       }
     }
 
-    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.shift)) {
+    if (this.pearl.inputter.isKeyPressed(Keys.shift)) {
       this.shoot();
     }
 

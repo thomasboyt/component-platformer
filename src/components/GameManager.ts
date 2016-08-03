@@ -1,18 +1,16 @@
-import * as Pearl from 'pearl';
-
 import {
   GameObject,
   Component,
   AssetManager,
   SpriteSheet,
-} from 'pearl-component-shim';
+} from 'pearl';
 
 import WorldManager from './WorldManager';
 import TitleScreenController from './TitleScreenController';
 import GameOverController from './GameOverController';
 import StarfieldRenderer from './render/StarfieldRenderer';
 
-export default class GameManager extends Component<{}> {
+export default class GameManager extends Component<null> {
   // Game settings
   gravityAccel: number = (5 / 10000);
 
@@ -51,7 +49,7 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.pearl.entities.add(this.title, null);
+    this.pearl.entities.add(this.title);
   }
 
   startGame() {
@@ -63,7 +61,7 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.pearl.entities.add(this.world, null);
+    this.pearl.entities.add(this.world);
   }
 
   handleAdvanceTitle() {
@@ -88,7 +86,7 @@ export default class GameManager extends Component<{}> {
       ],
     });
 
-    this.pearl.entities.add(this.gameOverScreen, null);
+    this.pearl.entities.add(this.gameOverScreen);
   }
 
   handleRestartGame() {

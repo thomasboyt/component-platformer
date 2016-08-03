@@ -1,7 +1,7 @@
-import {Component, Physical} from 'pearl-component-shim';
+import {Component, Physical} from 'pearl';
 import {palette} from '../../constants';
 
-export default class PlatformRenderer extends Component<{}> {
+export default class PlatformRenderer extends Component<null> {
   render(ctx: CanvasRenderingContext2D) {
     const phys = this.getComponent(Physical);
 

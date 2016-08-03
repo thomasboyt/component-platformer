@@ -1,4 +1,4 @@
-import {Component, GameObject, Physical} from 'pearl-component-shim';
+import {Component, GameObject, Physical} from 'pearl';
 import {palette} from '../constants';
 
 interface Opts {

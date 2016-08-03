@@ -1,4 +1,4 @@
-import {Component} from 'pearl-component-shim';
+import {Component} from 'pearl';
 import {randInt} from '../../util/math';
 import {palette} from '../../constants';
 
@@ -8,7 +8,7 @@ interface Star {
   ty: number;
 };
 
-export default class StarfieldRenderer extends Component<{}> {
+export default class StarfieldRenderer extends Component<null> {
   starfield: Star[];
 
   height: number = 400;

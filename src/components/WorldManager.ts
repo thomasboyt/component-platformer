@@ -1,12 +1,10 @@
-import * as Pearl from 'pearl';
-
 import {
   GameObject,
   Component,
   Physical,
   AnimationManager,
   SpriteSheet,
-} from 'pearl-component-shim';
+} from 'pearl';
 
 import GameManager from './GameManager';
 import PlatformerPhysics from './PlatformerPhysics';
@@ -22,7 +20,7 @@ interface PlatformPosition {
   width: number;
 }
 
-export default class WorldManager extends Component<{}> {
+export default class WorldManager extends Component<null> {
   // World settings
   width: number = 400;
   height: number = 400;

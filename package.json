@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "pearl": "^0.0.1"
+    "pearl": "^0.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",

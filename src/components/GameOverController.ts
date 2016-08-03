@@ -1,5 +1,4 @@
-import * as Pearl from 'pearl';
-import {Component} from 'pearl-component-shim';
+import {Component, Keys} from 'pearl';
 
 interface Options {
   onRestart: () => void;
@@ -13,7 +12,7 @@ export default class GameOverController extends Component<Options> {
   }
 
   update(dt: number) {
-    if (this.pearl.inputter.isKeyPressed(Pearl.Keys.r)) {
+    if (this.pearl.inputter.isKeyPressed(Keys.r)) {
       this.handleRestart();
     }
   }

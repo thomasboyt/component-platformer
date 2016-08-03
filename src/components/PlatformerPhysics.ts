@@ -1,5 +1,4 @@
-import * as Pearl from 'pearl';
-import {Component, GameObject, Physical} from 'pearl-component-shim';
+import {Component, GameObject, Physical} from 'pearl';
 import GameManager from './GameManager';
 import {rectangleIntersection, Intersection} from '../util/math';
 
@@ -27,7 +26,7 @@ class Delegate<T> {
   }
 }
 
-export default class PlatformerPhysics extends Component<{}> {
+export default class PlatformerPhysics extends Component<null> {
   grounded: boolean = false;
 
   afterBlockCollision: Delegate<Intersection> = new Delegate<Intersection>();
