@@ -1,4 +1,4 @@
-import {Component, GameObject, Physical} from 'pearl';
+import {Component, GameObject, Physical, PolygonCollider} from 'pearl';
 import {palette} from '../constants';
 
 interface Opts {
@@ -9,13 +9,11 @@ interface Opts {
 export default class BulletController extends Component<Opts> {
   bulletSpeed: number = 1 / 10;
 
+  width: number = 5;
+  height: number = 2;
+
   init(opts: Opts) {
     const phys = this.getComponent(Physical);
-
-    phys.size = {
-      x: 2,
-      y: 2,
-    };
 
     let vec: [number, number];
     if (opts.direction === 'left') {
@@ -33,10 +31,11 @@ export default class BulletController extends Component<Opts> {
     phys.vel.x = vec[0] * this.bulletSpeed;
     phys.vel.y = vec[1] * this.bulletSpeed;
 
+    const parentPoly = opts.creator.getComponent(PolygonCollider);
     const parentPhys = opts.creator.getComponent(Physical);
 
-    const offsetX = parentPhys.size.x / 2 + phys.size.x / 2;
-    const offsetY = parentPhys.size.y / 2 + phys.size.y / 2;
+    const offsetX = parentPoly.width! / 2 + this.width! / 2;
+    const offsetY = parentPoly.height! / 2 + this.height! / 2;
 
     phys.center = {
       x: parentPhys.center.x + (vec[0] * offsetX),
@@ -45,7 +44,7 @@ export default class BulletController extends Component<Opts> {
   }
 
   update(dt: number) {
-    // TODO: Detect if bullet goes off screen and destroy if so
+    // TODO: Raytrace bullet against all enemies in scene...
   }
 
   render(ctx: CanvasRenderingContext2D) {
@@ -53,9 +52,9 @@ export default class BulletController extends Component<Opts> {
     ctx.fillStyle = palette.lighter;
 
     ctx.fillRect(
-      phys.center.x - phys.size.x / 2,
-      phys.center.y - phys.size.y / 2,
-      phys.size.x,
-      phys.size.y);
+      phys.center.x - this.width / 2,
+      phys.center.y - this.height / 2,
+      this.width,
+      this.height);
   }
 }

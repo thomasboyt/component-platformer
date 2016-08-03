@@ -4,15 +4,17 @@ import {
   Physical,
   AnimationManager,
   SpriteSheet,
+  PolygonCollider,
+  PolygonRenderer,
 } from 'pearl';
 
 import GameManager from './GameManager';
 import PlatformerPhysics from './PlatformerPhysics';
 import PlayerController from './PlayerController';
 import BlorpController from './BlorpController';
-import PlatformRenderer from './render/PlatformRenderer';
 import {randInt} from '../util/math';
 
+import {palette} from '../constants';
 import * as Tags from '../Tags';
 
 interface PlatformPosition {
@@ -100,14 +102,15 @@ export default class WorldManager extends Component<null> {
             x: 200,
             y: 35,
           },
-          size: {
-            x: 11,
-            y: 20,
-          }
         }),
         // add controls to allow player to move left/right and jump
         new PlayerController({
           world: this.gameObject,
+        }),
+
+        PolygonCollider.createBox({
+          width: 11,
+          height: 20,
         }),
 
         // add platformer physics to apply gravity and collision with platforms
@@ -206,13 +209,16 @@ export default class WorldManager extends Component<null> {
             x: cx,
             y: cy,
           },
-          size: {
-            x: width,
-            y: height,
-          },
         }),
 
-        new PlatformRenderer(),
+        PolygonCollider.createBox({
+          width,
+          height,
+        }),
+
+        new PolygonRenderer({
+          fillStyle: palette.lighter,
+        }),
       ],
     }));
 
@@ -231,15 +237,16 @@ export default class WorldManager extends Component<null> {
             x: x,
             y: y
           },
-          size: {
-            x: 13,
-            y: 13,
-          },
         }),
 
         new BlorpController({
           world: this.gameObject,
           patrolBounds,
+        }),
+
+        PolygonCollider.createBox({
+          width: 13,
+          height: 13,
         }),
 
         new PlatformerPhysics(),

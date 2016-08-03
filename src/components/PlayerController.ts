@@ -1,4 +1,11 @@
-import {Component, GameObject, Physical, AnimationManager, Keys} from 'pearl';
+import {
+  Component,
+  GameObject,
+  Physical,
+  AnimationManager,
+  PolygonCollider,
+  Keys,
+} from 'pearl';
 
 import PlatformerPhysics from './PlatformerPhysics';
 import BulletController from './BulletController';
@@ -36,6 +43,7 @@ export default class PlayerController extends Component<Options> {
     }
 
     const physical = this.getComponent(Physical);
+    const poly = this.getComponent(PolygonCollider);
     const platformerPhysics = this.getComponent(PlatformerPhysics);
     const anim = this.getComponent(AnimationManager);
 
@@ -78,7 +86,7 @@ export default class PlayerController extends Component<Options> {
       this.shoot();
     }
 
-    if (physical.center.y > this.world.getComponent(WorldManager).height + physical.size.y / 2) {
+    if (physical.center.y > this.world.getComponent(WorldManager).height + poly.width! / 2) {
       this.state = PlayerState.dead;
       this.pearl.obj.getComponent(GameManager).playerDied();
     }
