@@ -38,6 +38,10 @@ export default class PlayerController extends Component<Options> {
   }
 
   update(dt: number) {
+    // XXX: testEnemyCollision needs to happen first since it sets the player state to "dead,"
+    // preventing the rest of this update hook from running
+    this.testEnemyCollision();
+
     if (this.state === PlayerState.dead) {
       return;
     }
@@ -110,22 +114,36 @@ export default class PlayerController extends Component<Options> {
     }));
   }
 
-  collision(other: GameObject) {
+  private testEnemyCollision() {
     if (this.state === PlayerState.dead) {
       return;
     }
 
-    if (other.hasTag(Tags.enemy)) {
-      this.getComponent(AnimationManager).set('dead');
+    const enemies = [...this.world.children].filter((entity) => entity.hasTag(Tags.enemy));
 
-      this.pearl.async.schedule(function* (this: PlayerController) {
-        this.state = PlayerState.dead;
-        this.getComponent(Physical).frozen = true;
+    const phys = this.getComponent(Physical);
 
-        yield this.pearl.async.waitMs(3000);
+    for (let enemy of enemies) {
+      const selfPoly = this.getComponent(PolygonCollider);
+      const otherPoly = enemy.getComponent(PolygonCollider);
 
-        this.pearl.obj.getComponent(GameManager).playerDied();
-      }.bind(this));
+      if (selfPoly.isColliding(otherPoly)) {
+        this.onEnemyCollision();
+        return;
+      }
     }
+  }
+
+  private onEnemyCollision() {
+    this.getComponent(AnimationManager).set('dead');
+
+    this.state = PlayerState.dead;
+    this.getComponent(Physical).frozen = true;
+
+    this.pearl.async.schedule(function* (this: PlayerController) {
+      yield this.pearl.async.waitMs(3000);
+
+      this.pearl.obj.getComponent(GameManager).playerDied();
+    }.bind(this));
   }
 }
