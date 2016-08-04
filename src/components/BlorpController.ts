@@ -1,7 +1,6 @@
-import {Component, GameObject, Physical, AnimationManager} from 'pearl';
+import {Component, GameObject, Physical, AnimationManager, CollisionResponse} from 'pearl';
 
 import PlatformerPhysics from './PlatformerPhysics';
-import {Intersection} from '../util/math';
 import WorldManager from './WorldManager';
 
 import * as Tags from '../Tags';
@@ -84,9 +83,10 @@ export default class BlorpController extends Component<Options> {
     }
   }
 
-  afterBlockCollision = (intersect: Intersection) => {
-    if (intersect.h > intersect.w) {
-      if (intersect.fromLeft) {
+  afterBlockCollision = (resp: CollisionResponse) => {
+    const vec = resp.overlapVector;
+    if (vec[1] > vec[0]) {
+      if (vec[0] < 0) {
         this.walkingRight = false;
       } else {
         this.walkingRight = true;

@@ -1,6 +1,5 @@
-import {Component, GameObject, Physical} from 'pearl';
+import {Component, GameObject, Physical, PolygonCollider, CollisionResponse} from 'pearl';
 import GameManager from './GameManager';
-import {rectangleIntersection, Intersection} from '../util/math';
 
 import * as Tags from '../Tags';
 
@@ -26,12 +25,24 @@ class Delegate<T> {
   }
 }
 
-export default class PlatformerPhysics extends Component<null> {
+interface Options {
+  world: GameObject;
+}
+
+export default class PlatformerPhysics extends Component<Options> {
+  world: GameObject;
+
   grounded: boolean = false;
 
-  afterBlockCollision: Delegate<Intersection> = new Delegate<Intersection>();
+  afterBlockCollision: Delegate<CollisionResponse> = new Delegate<CollisionResponse>();
+
+  init(opts: Options) {
+    this.world = opts.world;
+  }
 
   update(dt: number) {
+    this.testPlatformCollisions();
+
     const physical = this.getComponent(Physical);
 
     if (physical.vel.y !== 0) {
@@ -41,47 +52,48 @@ export default class PlatformerPhysics extends Component<null> {
     physical.vel.y += this.pearl.obj.getComponent(GameManager).gravityAccel * dt;
   }
 
-  collision(other: GameObject) {
+  private testPlatformCollisions() {
+    const blocks = [...this.world.children].filter((entity) => entity.hasTag(Tags.block));
+
     const phys = this.getComponent(Physical);
 
-    if (other.hasTag(Tags.block)) {
-      const intersect = rectangleIntersection(
-        phys,
-        other.getComponent(Physical)
-      );
+    for (let block of blocks) {
+      const selfPoly = this.getComponent(PolygonCollider);
+      const otherPoly = block.getComponent(PolygonCollider);
 
-      if (intersect.w > intersect.h) {
+      const collision = selfPoly.getCollision(otherPoly);
+      if (collision) {
+        this.resolvePlatformCollision(collision);
+      }
+    }
+  }
 
-        // Self is falling into a block from above
-        if (intersect.fromAbove) {
-          phys.center.y -= intersect.h;
+  private resolvePlatformCollision(collision: CollisionResponse) {
+    const phys = this.getComponent(Physical);
+    const vec = collision.overlapVector;
 
-          if (phys.vel.y > 0) {
-            phys.vel.y = 0;
-            this.grounded = true;
-          }
+    if (Math.abs(vec[1]) > Math.abs(vec[0])) {
+      phys.center.y -= vec[1];
 
-        // Self is rising into a block from below
-        } else {
-          phys.center.y += intersect.h;
-
-          if (phys.vel.y < 0) {
-            phys.vel.y = 0;
-          }
+      // Self is falling into a block from above
+      if (vec[1] > 0) {
+        if (phys.vel.y > 0) {
+          phys.vel.y = 0;
+          this.grounded = true;
         }
 
+      // Self is rising into a block from below
       } else {
-        // Self is colliding with the block from the left
-        if (intersect.fromLeft) {
-          phys.center.x -= intersect.w;
-
-        // Self is colliding with the block from the right
-        } else {
-          phys.center.x += intersect.w;
+        if (phys.vel.y < 0) {
+          phys.vel.y = 0;
         }
       }
 
-      this.afterBlockCollision.call(intersect);
+    } else {
+      // Self is colliding with the block from the left or right
+      phys.center.x -= vec[0];
     }
+
+    this.afterBlockCollision.call(collision);
   }
 }

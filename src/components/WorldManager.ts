@@ -114,7 +114,9 @@ export default class WorldManager extends Component<null> {
         }),
 
         // add platformer physics to apply gravity and collision with platforms
-        new PlatformerPhysics(),
+        new PlatformerPhysics({
+          world: this.gameObject,
+        }),
 
         new AnimationManager({
           sheet: this.pearl.obj.getComponent(GameManager).playerSheet,
@@ -141,6 +143,8 @@ export default class WorldManager extends Component<null> {
       // might be useful to be able to specify zIndex here, too?
       // zIndex: 0,
     }));
+
+    // this.createBlorp(350, 35, [0, 400]);
   }
 
   private generateRandomPlatform(y: number) {
@@ -184,8 +188,8 @@ export default class WorldManager extends Component<null> {
     this.createPlatform(x, y, width, 20);
 
     // if (randInt(1, 3) === 1) {
-    const blorpX = randInt(x + 7, x + width - 7);
-    this.createBlorp(blorpX, y - 7, [x, x + width]);
+    // const blorpX = randInt(x + 7, x + width - 7);
+    // this.createBlorp(blorpX, y - 7, [x, x + width]);
     // }
   }
 
@@ -249,7 +253,9 @@ export default class WorldManager extends Component<null> {
           height: 13,
         }),
 
-        new PlatformerPhysics(),
+        new PlatformerPhysics({
+          world: this.gameObject,
+        }),
 
         new AnimationManager({
           sheet: this.pearl.obj.getComponent(GameManager).blorpSheet,
