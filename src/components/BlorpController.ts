@@ -85,8 +85,9 @@ export default class BlorpController extends Component<Options> {
 
   afterBlockCollision = (resp: CollisionResponse) => {
     const vec = resp.overlapVector;
-    if (vec[1] > vec[0]) {
-      if (vec[0] < 0) {
+
+    if (Math.abs(vec[0]) > Math.abs(vec[1])) {
+      if (vec[0] > 0) {
         this.walkingRight = false;
       } else {
         this.walkingRight = true;
