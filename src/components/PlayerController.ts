@@ -5,6 +5,7 @@ import {
   AnimationManager,
   PolygonCollider,
   Keys,
+  AudioManager,
 } from 'pearl';
 
 import PlatformerPhysics from './PlatformerPhysics';
@@ -82,7 +83,7 @@ export default class PlayerController extends Component<Options> {
       }
 
       if (allowJump) {
-        physical.vel.y = -this.jumpSpeed;
+        this.jump();
       }
     }
 
@@ -96,7 +97,16 @@ export default class PlayerController extends Component<Options> {
     }
   }
 
+  private jump() {
+    const physical = this.getComponent(Physical);
+    physical.vel.y = -this.jumpSpeed;
+
+    this.pearl.obj.getComponent(AudioManager).play('jump');
+  }
+
   private shoot() {
+    this.pearl.obj.getComponent(AudioManager).play('shoot');
+
     this.gameObject.addChild(new GameObject({
       name: 'Bullet',
 

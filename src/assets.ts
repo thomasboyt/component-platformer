@@ -4,6 +4,8 @@ const assets = {
     blorpSheet: require<string>('../assets/blorp_sheet.png'),
   },
   audio: {
+    shoot: require<string>('../assets/shoot.wav'),
+    jump: require<string>('../assets/jump.wav'),
   },
 };
 
