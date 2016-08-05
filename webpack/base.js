@@ -57,9 +57,7 @@ module.exports = {
 
       {
         test: /\.js$/,
-        // TODO: Some day we shouldn't compile pearl/pearl-component-shim here, it should be nice
-        // distributed ES5. Until then...
-        exclude: /node_modules\/(?!(pearl|pearl-component-shim))/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
       },
 
