@@ -90,11 +90,15 @@ export default class PlayerController extends Component<Options> {
     if (this.pearl.inputter.isKeyPressed(Keys.shift)) {
       this.shoot();
     }
+  }
 
-    if (physical.center.y > this.world.getComponent(WorldManager).height + (poly.width!) / 2) {
-      this.state = PlayerState.dead;
-      this.pearl.obj.getComponent(GameManager).playerDied();
+  died() {
+    if (this.state === PlayerState.dead) {
+      return;
     }
+
+    this.getComponent(Physical).frozen = true;
+    this.state = PlayerState.dead;
   }
 
   private jump() {
@@ -147,8 +151,7 @@ export default class PlayerController extends Component<Options> {
   private onEnemyCollision() {
     this.getComponent(AnimationManager).set('dead');
 
-    this.state = PlayerState.dead;
-    this.getComponent(Physical).frozen = true;
+    this.died();
 
     this.pearl.async.schedule(function* (this: PlayerController) {
       yield this.pearl.async.waitMs(3000);

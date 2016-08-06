@@ -25,7 +25,10 @@ The game itself should be a super-simplified version of Blorp, mainly to avoid i
 * [ ] Reimplement collision detection
   * [x] Physics entities collide with platforms
   * [x] Player collides with enemies
-  * [x] Bullet collides with enemies (raytracing?)
+  * [ ] Bullet collides with enemies (raytracing?)
+    * This is still flaky for reasons I don't understand
   * [ ] Can some top-level component be like a CollisionWorld() that automatically collision-pairs all children with Colliders?
     * [ ] Write this out manually before trying to generalize!
+* [x] Replace rising scrolling with horizontal scrolling? Might be easier to write + way more fu
+* [ ] Add flying enemies
 * [ ] Add asset loading UI

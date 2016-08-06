@@ -5,3 +5,4 @@ export const block = 'block';
 export const enemy = 'enemy';
 export const bullet = 'bullet';
 export const staticBlock = 'staticBlock';
+export const player = 'player';

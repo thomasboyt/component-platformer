@@ -17,9 +17,11 @@ import {randInt} from '../util/math';
 import {palette} from '../constants';
 import * as Tags from '../Tags';
 
-interface PlatformPosition {
-  x: number;
+interface LastPlatform {
   width: number;
+  height: number;
+  x: number;
+  y: number;
 }
 
 export default class WorldManager extends Component<null> {
@@ -31,10 +33,8 @@ export default class WorldManager extends Component<null> {
   player: GameObject | null;
 
   // Scroll state
-  private scrollY: number = 0;
-  private lastSpawnY: number = 0;
-
-  private lastPlatformPosition: PlatformPosition;
+  private scrollX: number;
+  private lastPlatform: LastPlatform;
 
   init() {
     this.createWorld();
@@ -43,15 +43,16 @@ export default class WorldManager extends Component<null> {
   update(dt: number) {
     const deltaScroll = dt / 100 * 3;
 
-    this.scrollY += deltaScroll;
+    this.scrollX += deltaScroll;
 
     for (let obj of this.gameObject.children) {
       this.scrollObj(obj, deltaScroll);
     }
 
-    if (this.scrollY - this.lastSpawnY > 80) {
-      this.generateRandomPlatform(-20);
-      this.lastSpawnY = this.scrollY;
+    this.lastPlatform.x -= deltaScroll;
+
+    if (this.width - (this.lastPlatform.x + this.lastPlatform.width) > 80) {
+      this.generateNextPlatform();
     }
   }
 
@@ -72,7 +73,16 @@ export default class WorldManager extends Component<null> {
       const objPhys = obj.getComponent(Physical);
 
       if (objPhys) {
-        objPhys.center.y += deltaScroll;
+        objPhys.center.x -= deltaScroll;
+      }
+
+      if (obj.maybeGetComponent(PolygonCollider) && this.isOffscreen(obj)) {
+        if (obj.hasTag(Tags.player)) {
+          obj.getComponent(PlayerController).died();
+          this.pearl.obj.getComponent(GameManager).playerDied();
+        }
+
+        this.pearl.entities.destroy(obj);
       }
     }
 
@@ -81,15 +91,21 @@ export default class WorldManager extends Component<null> {
     }
   }
 
+  /**
+   * Returns true if the object has been scrolled past or if the object has fallen off the world
+   */
+  private isOffscreen(obj: GameObject): boolean {
+    const poly = obj.getComponent(PolygonCollider);
+    const {xMax, yMin} = poly.getBounds();
+
+    return (xMax < 0 || yMin > this.height);
+  }
+
   private createWorld() {
-    // 400 x 400 static walls on the edges that stay in place
-    this.createPlatform(-20, 0, 20, 400, true);
-    this.createPlatform(400, 0, 20, 400, true);
+    this.scrollX = 0;
 
-    // create full-width landing platform
-    this.createPlatform(0, 50, 400, 400);
-
-    this.generateRandomPlatform(-30)
+    // create full-width starting platform
+    this.createPlatform(0, 350, 400, 50);
 
     this.player = this.gameObject.addChild(new GameObject({
       // name is used for debug display and maybe lookups in the future?
@@ -100,7 +116,7 @@ export default class WorldManager extends Component<null> {
         new Physical({
           center: {
             x: 200,
-            y: 35,
+            y: 340,
           },
         }),
         // add controls to allow player to move left/right and jump
@@ -140,60 +156,30 @@ export default class WorldManager extends Component<null> {
         })
       ],
 
-      // might be useful to be able to specify zIndex here, too?
-      // zIndex: 0,
+      tags: [Tags.player],
     }));
-
-    // this.createBlorp(350, 35, [0, 400]);
   }
 
-  private generateRandomPlatform(y: number) {
-    const lastRange = [
-      this.lastPlatformPosition.x,
-      this.lastPlatformPosition.x + this.lastPlatformPosition.width,
-    ];
+  private generateNextPlatform() {
+    const x = this.width + 50;  // TODO: obviously randomize dis
+    const prevY = this.lastPlatform.y;
 
-    // min width = minimum width of generated platform
-    // min gap = minimum gap between the edge of the platform below and the edge of this platform
-    const minWidth = 100;
-    const minGap = 30;
+    const padding = 25;
+    const lowerY = prevY - 100 < padding ? padding : prevY - 100;
+    const upperY = prevY + 100 > this.height - padding ? this.height - padding : prevY + 100;
+    const y = randInt(lowerY, upperY);
 
-    // Pick a direction to spawn the next platform in
-    let platformDirection: 'left' | 'right';
+    const width = randInt(50, 200);
 
-    if (lastRange[0] - minWidth - minGap < 0) {
-      platformDirection = 'right';
-    } else if (lastRange[1] + minWidth + minGap > this.width) {
-      platformDirection = 'left';
-    } else {
-      platformDirection = randInt(0, 1) ? 'left' : 'right';
-    }
-
-    // Pick a random position + length for the platform
-    let x: number;
-    let width: number;
-    let maxWidth: number;
-
-    if (platformDirection === 'left') {
-      x = randInt(0, lastRange[1] - minGap - minWidth);
-      maxWidth = lastRange[1] - x - minGap;
-      width = randInt(minWidth, maxWidth);
-
-    } else {
-      x = randInt(lastRange[0] + minGap, this.width - minWidth);
-      maxWidth = this.width - x;
-      width = randInt(minWidth, maxWidth);
-    }
-
-    this.createPlatform(x, y, width, 20);
+    const platform = this.createPlatform(x, y, width, 20);
 
     // if (randInt(1, 3) === 1) {
-    // const blorpX = randInt(x + 7, x + width - 7);
-    // this.createBlorp(blorpX, y - 7, [x, x + width]);
+      const blorpX = randInt(x + 7, x + width - 7);
+      this.createBlorp(blorpX, y - 7, platform);
     // }
   }
 
-  private createPlatform(x: number, y: number, width: number, height: number, isStatic?: boolean) {
+  private createPlatform(x: number, y: number, width: number, height: number, isStatic?: boolean): GameObject {
     const cx = x + width / 2;
     const cy = y + height / 2;
 
@@ -202,7 +188,7 @@ export default class WorldManager extends Component<null> {
       tags.push(Tags.staticBlock);
     }
 
-    this.gameObject.addChild(new GameObject({
+    const platform = this.gameObject.addChild(new GameObject({
       name: 'Platform',
 
       tags,
@@ -226,10 +212,12 @@ export default class WorldManager extends Component<null> {
       ],
     }));
 
-    this.lastPlatformPosition = {x, width};
+    this.lastPlatform = {x, y, width, height};
+
+    return platform;
   }
 
-  private createBlorp(x: number, y: number, patrolBounds: [number, number]) {
+  private createBlorp(x: number, y: number, platform: GameObject) {
     this.gameObject.addChild(new GameObject({
       name: 'Blorp',
 
@@ -244,8 +232,7 @@ export default class WorldManager extends Component<null> {
         }),
 
         new BlorpController({
-          world: this.gameObject,
-          patrolBounds,
+          platform,
         }),
 
         PolygonCollider.createBox({
