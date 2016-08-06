@@ -11,7 +11,7 @@ The game itself should be a super-simplified version of Blorp, mainly to avoid i
     * [x] Blorp should get sploded when it's hit by a bullet
 * [x] Add sounds
   * [x] Pew pew lasergun!
-  * [x] Jump nois
+  * [x] Jump noise
 * [x] Implement game rules
   * [x] Player should die when hitting an enemy
     * Use object tags to define what an "enemy" is
@@ -25,7 +25,7 @@ The game itself should be a super-simplified version of Blorp, mainly to avoid i
 * [ ] Reimplement collision detection
   * [x] Physics entities collide with platforms
   * [x] Player collides with enemies
-  * [ ] Bullet collides with enemies (raytracing?)
+  * [x] Bullet collides with enemies (raytracing?)
   * [ ] Can some top-level component be like a CollisionWorld() that automatically collision-pairs all children with Colliders?
     * [ ] Write this out manually before trying to generalize!
 * [ ] Add asset loading UI
