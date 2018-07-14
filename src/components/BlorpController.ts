@@ -10,7 +10,7 @@ interface Options {
 }
 
 export default class BlorpController extends Component<Options> {
-  private platform: GameObject;
+  private platform!: GameObject;
 
   walkSpeed: number = 5 / 100;
   jumpSpeed: number = 2 / 10;
@@ -30,7 +30,7 @@ export default class BlorpController extends Component<Options> {
 
   getPatrolBounds(): [number, number] {
     const platformX = this.platform.getComponent(Physical).center.x;
-    const platformWidth = this.platform.getComponent(PolygonCollider).width;
+    const platformWidth = this.platform.getComponent(PolygonCollider).width!;
 
     return [platformX - platformWidth / 2, platformX + platformWidth / 2];
   }

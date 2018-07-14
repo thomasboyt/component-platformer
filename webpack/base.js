@@ -1,74 +1,51 @@
 var path = require('path');
-var createVendorChunk = require('webpack-create-vendor-chunk');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: {
-    app: [
-      'babel-polyfill',
-      './src/entry.ts',
-    ],
-  },
+  entry: './src/entry.ts',
 
   output: {
-    path: './build/',
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[hash].js',
+    path: path.resolve(__dirname, '../build'),
   },
 
   plugins: [
-    createVendorChunk(),
-    // new ExtractTextPlugin('[name].[chunkhash].css'),
-
     new HtmlWebpackPlugin({
       template: './templates/index.html',
       filename: 'index.html',
-      inject: 'body',
-      chunks: ['vendor', 'app'],
+      // inject: 'body',
+      // chunks: ['app'],
     }),
   ],
 
   resolve: {
-    extensions: ['', '.jsx', '.js', '.tsx', '.ts'],
-
-    alias: {
-      '__root': process.cwd(),
-    },
+    extensions: ['.jsx', '.js', '.tsx', '.ts'],
   },
 
   devtool: 'source-map',
 
-  ts: {
-    compilerOptions: {
-      noEmit: false,
-    },
-  },
-
-  resolveLoader: {
-    root: path.join(__dirname, '../node_modules'),
-  },
-
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.tsx?$/,
-        loaders: ['babel', 'ts']
-      },
-
-      {
-        test: /\.js$/,
+        use: 'ts-loader',
         exclude: /node_modules/,
-        loader: 'babel-loader',
       },
-
+      // {
+      //   test: /\.css$/,
+      //   use: ['style-loader', 'css-loader'],
+      // },
       {
-        test: /\.png|\.wav$/,
-        loader: 'file-loader',
+        test: /\.(png|jpg|gif|ttf|wav)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 50000,
+          },
+        },
       },
-
-    ]
+    ],
   },
-
   devServer: {
     contentBase: 'static',
     historyApiFallback: true,

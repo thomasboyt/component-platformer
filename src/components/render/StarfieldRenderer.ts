@@ -9,7 +9,7 @@ interface Star {
 };
 
 export default class StarfieldRenderer extends Component<null> {
-  starfield: Star[];
+  starfield!: Star[];
 
   height: number = 400;
   width: number = 400;

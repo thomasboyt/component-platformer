@@ -30,11 +30,11 @@ export default class WorldManager extends Component<null> {
   height: number = 400;
 
   // Object references
-  player: GameObject | null;
+  player?: GameObject;
 
   // Scroll state
-  private scrollX: number;
-  private lastPlatform: LastPlatform;
+  private scrollX!: number;
+  private lastPlatform!: LastPlatform;
 
   init() {
     this.createWorld();
@@ -73,7 +73,10 @@ export default class WorldManager extends Component<null> {
       const objPhys = obj.getComponent(Physical);
 
       if (objPhys) {
-        objPhys.center.x -= deltaScroll;
+        objPhys.translate({
+          x: -deltaScroll,
+          y: 0,
+        });
       }
 
       if (obj.maybeGetComponent(PolygonCollider) && this.isOffscreen(obj)) {

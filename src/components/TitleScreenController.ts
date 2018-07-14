@@ -5,7 +5,7 @@ interface Options {
 }
 
 export default class TitleScreenController extends Component<Options> {
-  private handleAdvanceTitle: () => void;
+  private handleAdvanceTitle!: () => void;
 
   init(opts: Options) {
     this.handleAdvanceTitle = opts.onAdvance;

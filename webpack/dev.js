@@ -1,14 +1,11 @@
-var webpack = require('webpack');
-var webpackMerge = require('webpack-merge');
+var merge = require('webpack-merge');
+var common = require('./base');
 
-var config = require('./base');
-
-module.exports = webpackMerge(config, {
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"development"'
-      }
-    }),
-  ],
+module.exports = merge(common, {
+  mode: 'development',
+  devtool: 'inline-source-map',
+  serve: {
+    content: './static',
+    hot: false,
+  },
 });

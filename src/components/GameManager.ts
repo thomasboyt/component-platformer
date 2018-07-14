@@ -19,8 +19,8 @@ export default class GameManager extends Component<null> {
   world: GameObject | null = null;
   gameOverScreen: GameObject | null = null;
 
-  blorpSheet: SpriteSheet;
-  playerSheet: SpriteSheet;
+  blorpSheet!: SpriteSheet;
+  playerSheet!: SpriteSheet;
 
   init() {
     const assetManager = this.getComponent(AssetManager);

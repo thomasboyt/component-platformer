@@ -32,7 +32,7 @@ export default class PlayerController extends Component<Options> {
 
   didDoubleJump: boolean = false;
 
-  world: GameObject;
+  world!: GameObject;
 
   init(opts: Options) {
     this.world = opts.world;
@@ -153,10 +153,10 @@ export default class PlayerController extends Component<Options> {
 
     this.died();
 
-    this.pearl.async.schedule(function* (this: PlayerController) {
+    this.runCoroutine(function* (this: PlayerController) {
       yield this.pearl.async.waitMs(3000);
 
       this.pearl.obj.getComponent(GameManager).playerDied();
-    }.bind(this));
+    });
   }
 }

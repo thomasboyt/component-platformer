@@ -5,7 +5,7 @@ interface Options {
 }
 
 export default class GameOverController extends Component<Options> {
-  private handleRestart: () => void;
+  private handleRestart!: () => void;
 
   init(opts: Options) {
     this.handleRestart = opts.onRestart;

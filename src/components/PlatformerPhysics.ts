@@ -30,7 +30,7 @@ interface Options {
 }
 
 export default class PlatformerPhysics extends Component<Options> {
-  world: GameObject;
+  world!: GameObject;
 
   grounded: boolean = false;
 
@@ -73,7 +73,7 @@ export default class PlatformerPhysics extends Component<Options> {
     const vec = collision.overlapVector;
 
     if (Math.abs(vec[1]) > Math.abs(vec[0])) {
-      phys.center.y -= vec[1];
+      phys.translate({x: 0, y: -vec[1]});
 
       // Self is falling into a block from above
       if (vec[1] > 0) {
@@ -91,7 +91,7 @@ export default class PlatformerPhysics extends Component<Options> {
 
     } else {
       // Self is colliding with the block from the left or right
-      phys.center.x -= vec[0];
+      phys.translate({x: -vec[0], y: 0});
     }
 
     this.afterBlockCollision.call(collision);
