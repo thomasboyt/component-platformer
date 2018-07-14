@@ -111,7 +111,7 @@ export default class PlayerController extends Component<Options> {
   private shoot() {
     this.pearl.obj.getComponent(AudioManager).play('shoot');
 
-    this.gameObject.addChild(new GameObject({
+    const bullet = this.pearl.entities.add(new GameObject({
       name: 'Bullet',
 
       tags: [Tags.bullet],
